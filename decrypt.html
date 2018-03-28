@@ -8,27 +8,45 @@
 <body>
     Encrypted Key Blub:<br><textarea id="encryptedkey" rows="8" cols="100"></textarea>
     <br>
+    <button id="answer">Answer security questions</button>
     <br>
     <br>
+    <div id= "sec" style="display:none">
     If not relevant, leave answers to the following questions empty.
     <br>
+    <br>
+    </div>
+    <div id="sec1" style="display:none">
     1. What is the first name of your spouse's father?<input id="q1">
     <br>
+    </div>
+    <div id="sec2" style="display:none">
     2. What was your High School Mascot?  <input id="q2">
     <br>
+    </div>
+    <div id="sec3" style="display:none">
     3. In what city or town did you meet your spouse/partner?  <input id="q3">
     <br>
+    </div>
+    <div id="sec4" style="display:none">
     4. In what city or town did your mother and father meet?  <input id="q4">
     <br>
+    </div>
+    <div id="sec5" style="display:none">
     5. In what town or city was your first full time job?  <input id="q5">
     <br>
+    </div>
+    <div id="sec6" style="display:none">
     6. What is the make of your first car?  <input id="q6">
     <br>
+    </div>
+    <div id="sec7" style="display:none">
     7. What is the name of your first pet?  <input id="q7">
     <br>
+    </div>
     <br>
     <br>
-<button id="decrypt">Retrieve My Private Key</button>
+    <button id="decrypt" style="display:none">Retrieve My Private Key</button>
  
 <hr>
 <div id="result"></div>
@@ -43,17 +61,41 @@ function decrypt() {
     var q6 = document.getElementById('q6').value.trim();
     var q7 = document.getElementById('q7').value.trim();
     var encryptedkeyblub = document.getElementById('encryptedkey').value.trim();
+    var datastr = window.atob(encryptedkeyblub);
+    var data = JSON.parse(datastr);
 
-    //alert(encryptedkeyblub);
-    var encryptedkey = window.atob(encryptedkeyblub);
-
-    //alert(encryptedkey);
+    var encryptedkey = data.encrypteddata;
 
     var encryptionkey = q1 + q2 + q3 + q4 + q5 + q6 + q7;
     var privatekey = sjcl.decrypt(encryptionkey, encryptedkey);
     alert("Your private key is:\n" + privatekey);
 }
+
+function answer() {
+    var encryptedkeyblub = document.getElementById('encryptedkey').value.trim();
+    var datastr = window.atob(encryptedkeyblub);
+    var data = JSON.parse(datastr);
+    // display relevant questions only
+    document.getElementById('sec').style.display = 'block';
+    if (data.qlist.includes(1))
+        document.getElementById('sec1').style.display = 'block';
+    if (data.qlist.includes(2))
+        document.getElementById('sec2').style.display = 'block';
+    if (data.qlist.includes(3))
+        document.getElementById('sec3').style.display = 'block';
+    if (data.qlist.includes(4))
+        document.getElementById('sec4').style.display = 'block';
+    if (data.qlist.includes(5))
+        document.getElementById('sec5').style.display = 'block';
+    if (data.qlist.includes(6))
+        document.getElementById('sec6').style.display = 'block';
+    if (data.qlist.includes(7))
+        document.getElementById('sec7').style.display = 'block';
+
+    document.getElementById('decrypt').style.display = 'block';
+}
  
+document.getElementById('answer').addEventListener('click', answer);
 document.getElementById('decrypt').addEventListener('click', decrypt);
 </script>
 </body>

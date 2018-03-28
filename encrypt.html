@@ -45,19 +45,27 @@ function encrypt() {
     var key = document.getElementById('key').value.trim();
 
     var encryptionkey = q1 + q2 + q3 + q4 + q5 + q6 + q7;
-    var encrypteddata= sjcl.encrypt(encryptionkey, key);
-    var b64encrypteddata = window.btoa(encrypteddata);
+    var encrypteddata = sjcl.encrypt(encryptionkey, key);
+    var data = { qsource : "QmNY5oxKAzZwf6UswT1h3WWwWqMw58S2Qtdbjz2QVPmqEY"};
+    data.qlist = [];
+    if (!!q1) data.qlist.push(1);
+    if (!!q2) data.qlist.push(2);
+    if (!!q3) data.qlist.push(3);
+    if (!!q4) data.qlist.push(4);
+    if (!!q5) data.qlist.push(5);
+    if (!!q6) data.qlist.push(6);
+    if (!!q7) data.qlist.push(7);
 
-    //let objJsonStr = JSON.stringify(encrypteddata);
-    //let objJsonB64 = Buffer.from(objJsonStr).toString("base64");
+    data.datatype = "privatekey";
+    data.encrypteddata = encrypteddata;
+    var b64encrypteddata = window.btoa(JSON.stringify(data));
 
     alert ("Copy following string in the clipboard and use it in the Eden Smart Contract:\n\n"+ b64encrypteddata);
 
 }
- 
+
 document.getElementById('encrypt').addEventListener('click', encrypt);
 </script>
 </body>
 
 </html>
-
