@@ -9,8 +9,10 @@
     Private Key:<textarea id="key" rows="1" cols="80"></textarea>
     <br>
     <br>
+    <b> Answer atleast 7 questions. </b>
     <br>
     If not relevant, leave answers to the following questions empty.
+    <br>
     <br>
     1. What is the first name of your spouse's father?<input id="q1">
     <br>
@@ -26,6 +28,51 @@
     <br>
     7. What is the name of your first pet?  <input id="q7">
     <br>
+    8. What is the name of your first school? <input id="q8">
+    <br>
+    9. What is your oldest child's nickname? <input id="q9">
+    <br>
+    10. What is the name of the place your wedding reception was held? <input id="q10">
+    <br>
+    11. What is the name of your favorite childhood friend? <input id="q11">
+    <br>
+    12. What school did you attend for sixth grade? <input id="q12">
+    <br>
+    13. What time of the day was your first child born? (hh:mm) <input id="q13">
+    <br>
+    14. What time of the day were you born? (hh:mm) <input id="q14">
+    <br>
+    15. What was the house number and street name you lived in as a child? <input id="q15">
+    <br>
+    16. What was the last name of your third grade teacher? <input id="q16">
+    <br>
+    17. What was the make and model of your first car? <input id="q17">
+    <br>
+    18. What was the name of the company where you had your first job? <input id="q18">
+    <br>
+    19. What was the name of the hospital where you were born? <input id="q19">
+    <br>
+    20. What was the name of your elementary / primary school? <input id="q20">
+    <br>
+    21. What was the name of your first stuffed animal or doll or action figure? <input id="q21">
+    <br>
+    22. What was your childhood nickname? <input id="q22">
+    <br>
+    23. What was your favorite food as a child? <input id="q23">
+    <br>
+    24. What was your favorite place to visit as a child? <input id="q24">
+    <br>
+    25. What was your favorite sport in high school? <input id="q25">
+    <br>
+    26. What were the last four digits of your childhood telephone number? <input id="q26">
+    <br>
+    27. Where were you New Year's 2000? <input id="q27">
+    <br>
+    28. Who is your childhood sports hero? <input id="q28">
+    <br>
+    29. Who was your childhood hero? <input id="q29">
+    <br>
+    30. What is your youngest child's nickname? <input id="q30">
     <br>
     <br>
 <button id="encrypt">Encrypt My Key</button>
@@ -35,16 +82,43 @@
  
 <script>
 function encrypt() {
-    var q1 = document.getElementById('q1').value.trim();
-    var q2 = document.getElementById('q2').value.trim();
-    var q3 = document.getElementById('q3').value.trim();
-    var q4 = document.getElementById('q4').value.trim();
-    var q5 = document.getElementById('q5').value.trim();
-    var q6 = document.getElementById('q6').value.trim();
-    var q7 = document.getElementById('q7').value.trim();
-    var key = document.getElementById('key').value.trim();
+    var q1 = document.getElementById('q1').value.trim().toLowerCase();
+    var q2 = document.getElementById('q2').value.trim().toLowerCase();
+    var q3 = document.getElementById('q3').value.trim().toLowerCase();
+    var q4 = document.getElementById('q4').value.trim().toLowerCase();
+    var q5 = document.getElementById('q5').value.trim().toLowerCase();
+    var q6 = document.getElementById('q6').value.trim().toLowerCase();
+    var q7 = document.getElementById('q7').value.trim().toLowerCase();
+    var q8 = document.getElementById('q8').value.trim().toLowerCase();
+    var q9 = document.getElementById('q9').value.trim().toLowerCase();
+    var q10 = document.getElementById('q10').value.trim().toLowerCase();
+    var q11 = document.getElementById('q11').value.trim().toLowerCase();
+    var q12 = document.getElementById('q12').value.trim().toLowerCase();
+    var q13 = document.getElementById('q13').value.trim().toLowerCase();
+    var q14 = document.getElementById('q14').value.trim().toLowerCase();
+    var q15 = document.getElementById('q15').value.trim().toLowerCase();
+    var q16 = document.getElementById('q16').value.trim().toLowerCase();
+    var q17 = document.getElementById('q17').value.trim().toLowerCase();
+    var q18 = document.getElementById('q18').value.trim().toLowerCase();
+    var q19 = document.getElementById('q19').value.trim().toLowerCase();
+    var q20 = document.getElementById('q20').value.trim().toLowerCase();
+    var q21 = document.getElementById('q21').value.trim().toLowerCase();
+    var q22 = document.getElementById('q22').value.trim().toLowerCase();
+    var q23 = document.getElementById('q23').value.trim().toLowerCase();
+    var q24 = document.getElementById('q24').value.trim().toLowerCase();
+    var q25 = document.getElementById('q25').value.trim().toLowerCase();
+    var q26 = document.getElementById('q26').value.trim().toLowerCase();
+    var q27 = document.getElementById('q27').value.trim().toLowerCase();
+    var q28 = document.getElementById('q28').value.trim().toLowerCase();
+    var q29 = document.getElementById('q29').value.trim().toLowerCase();
+    var q30 = document.getElementById('q30').value.trim().toLowerCase();
+    var key = document.getElementById('key').value.trim().toLowerCase();
 
-    var encryptionkey = q1 + q2 + q3 + q4 + q5 + q6 + q7;
+    var encryptionkey = 
+        q1 + q2 + q3 + q4 + q5 + q6 + q7 + q8 + q9 + q10 +
+        q11 + q12 + q13 + q14 + q15 + q16 + q17 + q18 + q19 + q20 +
+        q21 + q22 + q23 + q24 + q25 + q26 + q27 + q28 + q29 + q30;
+
     var encrypteddata = sjcl.encrypt(encryptionkey, key);
     var data = { qsource : "QmNY5oxKAzZwf6UswT1h3WWwWqMw58S2Qtdbjz2QVPmqEY"};
     data.qlist = [];
@@ -55,6 +129,34 @@ function encrypt() {
     if (!!q5) data.qlist.push(5);
     if (!!q6) data.qlist.push(6);
     if (!!q7) data.qlist.push(7);
+    if (!!q8) data.qlist.push(8);
+    if (!!q9) data.qlist.push(9);
+    if (!!q10) data.qlist.push(10);
+    if (!!q11) data.qlist.push(11);
+    if (!!q12) data.qlist.push(12);
+    if (!!q13) data.qlist.push(13);
+    if (!!q14) data.qlist.push(14);
+    if (!!q15) data.qlist.push(15);
+    if (!!q16) data.qlist.push(16);
+    if (!!q17) data.qlist.push(17);
+    if (!!q18) data.qlist.push(18);
+    if (!!q19) data.qlist.push(19);
+    if (!!q20) data.qlist.push(20);
+    if (!!q21) data.qlist.push(21);
+    if (!!q22) data.qlist.push(22);
+    if (!!q23) data.qlist.push(23);
+    if (!!q24) data.qlist.push(24);
+    if (!!q25) data.qlist.push(25);
+    if (!!q26) data.qlist.push(26);
+    if (!!q27) data.qlist.push(27);
+    if (!!q28) data.qlist.push(28);
+    if (!!q29) data.qlist.push(29);
+    if (!!q30) data.qlist.push(30);
+
+    if (data.qlist.length < 7) {
+        alert("Answer atleast 7 security questions.");
+        return;
+    }
 
     data.datatype = "privatekey";
     data.encrypteddata = encrypteddata;
