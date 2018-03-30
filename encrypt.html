@@ -166,6 +166,10 @@ function encrypt() {
 
 }
 
+if(navigator.onLine){
+    alert('PLEASE TURN OFF YOUR INTERNET CONNECTION (turn off wifi or disconnect LAN).');
+} 
+
 document.getElementById('encrypt').addEventListener('click', encrypt);
 </script>
 </body>
