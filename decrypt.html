@@ -188,7 +188,7 @@ function decrypt() {
         q21 + q22 + q23 + q24 + q25 + q26 + q27 + q28 + q29 + q30;
 
     var privatekey = sjcl.decrypt(encryptionkey, encryptedkey);
-    alert("Your private key is:\n" + privatekey);
+    alert("Your private key is:\n" + privatekey + "\n\nUse this private key to recover your assets from the Eden Smart Contract.");
 }
 
 function answer() {
@@ -269,7 +269,7 @@ function answer() {
 }
  
 if(navigator.onLine){
-    alert('PLEASE TURN OFF YOUR INTERNET CONNECTION (turn off wifi or disconnect LAN).');
+    alert('TURN OFF YOUR INTERNET CONNECTION (turn off wifi or disconnect LAN).');
 } 
 
 document.getElementById('answer').addEventListener('click', answer);
