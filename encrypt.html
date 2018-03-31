@@ -169,7 +169,7 @@ function encrypt() {
     var encrypteddata = sjcl.encrypt(encryptionkey, privateKey);
     data.datatype = "privatekey";
     data.encrypteddata = encrypteddata;
-    var b64encrypteddata = window.btoa(JSON.stringify(data));
+    var b64encrypteddata = keyAddress + window.btoa(JSON.stringify(data));
 
     alert ("Press ok to copy following string in the clipboard and use it in the Eden Smart Contract:\n\n"+ b64encrypteddata);
 

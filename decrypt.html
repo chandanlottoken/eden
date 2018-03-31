@@ -176,7 +176,9 @@ function decrypt() {
     var q29 = document.getElementById('q29').value.trim().toLowerCase();
     var q30 = document.getElementById('q30').value.trim().toLowerCase();
 
-    var encryptedkeyblub = document.getElementById('encryptedkey').value.trim();
+    var blub = document.getElementById('encryptedkey').value.trim();
+    var keyAddress = blub.slice(0,40);
+    var encryptedkeyblub = blub.slice(40);
     var datastr = window.atob(encryptedkeyblub);
     var data = JSON.parse(datastr);
 
@@ -188,11 +190,14 @@ function decrypt() {
         q21 + q22 + q23 + q24 + q25 + q26 + q27 + q28 + q29 + q30;
 
     var privatekey = sjcl.decrypt(encryptionkey, encryptedkey);
-    alert("Your private key is:\n" + privatekey + "\n\nUse this private key to recover your assets from the Eden Smart Contract.");
+    alert("Your private key is:\n" + privatekey + "\n\nUse this private key to recover your assets from the Eden Smart Contract.\n\nYour public address is:\n" + "0x" + keyAddress);
+
 }
 
 function answer() {
-    var encryptedkeyblub = document.getElementById('encryptedkey').value.trim();
+    var blub = document.getElementById('encryptedkey').value.trim();
+    var keyAddress = blub.slice(0,40);
+    var encryptedkeyblub = blub.slice(40);
     var datastr = window.atob(encryptedkeyblub);
     var data = JSON.parse(datastr);
 
