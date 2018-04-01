@@ -6,11 +6,14 @@
 </head>
 <script src="sjcl.js"></script>
 <body>
+    <button id="start">Internet Turned Off</button>
+    <div id="initial" style="display:none">
     Encrypted Key Blub:<br><textarea id="encryptedkey" rows="8" cols="100"></textarea>
     <br>
     <button id="answer">Answer security questions</button>
     <br>
     <br>
+    </div>
     <div id= "sec" style="display:none">
         <b>Do not leave answers to the following questions empty. They were answered while protecting your account. </b>
     <br>
@@ -277,8 +280,20 @@ if(navigator.onLine){
     alert('TURN OFF YOUR INTERNET CONNECTION (turn off wifi or disconnect LAN).');
 } 
 
+function start() {
+    document.getElementById('start').style.display = 'none';
+
+    if(navigator.onLine){
+        alert('Internet is still on. You will be at risk.');
+    }
+
+    document.getElementById('initial').style.display = 'block';
+}
+
+document.getElementById('initial').style.display = 'none';
 document.getElementById('answer').addEventListener('click', answer);
 document.getElementById('decrypt').addEventListener('click', decrypt);
+document.getElementById('start').addEventListener('click', start);
 </script>
 </body>
 
