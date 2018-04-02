@@ -6,7 +6,7 @@
 </head>
 <script src="sjcl.js"></script>
 <body>
-    <button id="start">Internet Turned Off</button>
+    <button id="start" style="display:none">Internet Turned Off</button>
     <div id="initial" style="display:none">
     Encrypted Key Blub:<br><textarea id="encryptedkey" rows="8" cols="100"></textarea>
     <br>
@@ -276,9 +276,18 @@ function answer() {
     document.getElementById('decrypt').style.display = 'block';
 }
  
+var isChrome = !!window.chrome && !!window.chrome.webstore;
+if (!isChrome)
+{
+    alert('Only supported on google chrome.');
+    window.close();
+} else {
+// start google chrome code
+
 if(navigator.onLine){
     alert('TURN OFF YOUR INTERNET CONNECTION (turn off wifi or disconnect LAN).');
 } 
+document.getElementById('start').style.display = 'block';
 
 function start() {
     document.getElementById('start').style.display = 'none';
@@ -294,6 +303,9 @@ document.getElementById('initial').style.display = 'none';
 document.getElementById('answer').addEventListener('click', answer);
 document.getElementById('decrypt').addEventListener('click', decrypt);
 document.getElementById('start').addEventListener('click', start);
+
+} // end google chrome code
+
 </script>
 </body>
 
