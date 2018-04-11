@@ -629,12 +629,11 @@ function listenForClicks (miniToken, web3) {
         }) .catch(console.error);
 
         // send some gas ether to recovery account 
-            web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress, data:{}}).then(function(txHash) {
-            console.log('Ether Transaction sent for gas')
-            console.dir(txHash)
-            waitForTxToBeMined(txHash)
-            alert("Sent some of your ethers for gas costs to your recovery account");
-        }).catch(console.error);
+        web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress, data:{}}, function (txhash) {
+        console.log('Ether Transaction sent for gas')
+        console.dir(txHash)
+        alert("Sent some of your ethers for gas costs to your recovery account");
+        })
          
     }) 
  
@@ -650,12 +649,11 @@ function listenForClicks (miniToken, web3) {
         }) .catch(console.error);
 
         // send some gas ether to recovery account 
-            web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress, data:{}}).then(function(txHash) {
-            console.log('Ether Transaction sent for gas')
-            console.dir(txHash)
-            waitForTxToBeMined(txHash)
-            alert("Sent some of your ethers for gas costs to your recovery account");
-        }).catch(console.error);
+        web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress, data:{}}, function (txhash) {
+        console.log('Ether Transaction sent for gas')
+        console.dir(txHash)
+        alert("Sent some of your ethers for gas costs to your recovery account");
+        })
          
     }) 
  
