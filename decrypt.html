@@ -297,6 +297,17 @@ function start() {
     }
 
     document.getElementById('initial').style.display = 'block';
+
+    // fill the encrypted textarea with keyblub in URL if available
+    {
+        var parser = document.createElement('a');
+        parser = location;
+        if (parser.search) {
+            var keyBlub = parser.search.slice(6);
+            alert(keyBlub);
+        }
+
+    }
 }
 
 document.getElementById('initial').style.display = 'none';
