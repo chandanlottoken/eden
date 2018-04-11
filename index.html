@@ -632,7 +632,7 @@ function secure_account()
             var keyblurb = 'I am a fool';
 
             getBalance(address)
-              .then (function () { minitoken.secure_account(keyAddress, keyblurb, { from: address, value: balzoo, gas: 1000000 })
+              .then (function () { minitoken.secure_account(keyAddress, keyblurb, { from: address, value: bal, gas: 1000000 })
                 .then(function (txHash) {
                 console.log('Transaction sent')
                 console.dir(txHash)
