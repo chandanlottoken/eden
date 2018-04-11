@@ -567,20 +567,11 @@ const abi = [
     }
   ]
   
-//const contract_address = '0x0c0070dae48bc3d50afad8c7f4a8252cfba1ea79'
-//const contract_address = '0xe0f66e534367baf392c0ed0adfd365ba20af1d7c'
-//const contract_address = '0x50DC0704F256DaD65A6aB19DA5aA660A94566Fe4'
 const contract_address = '0x8C381b4200c7bFC66523df6df6C3D162602a7B5d'
 const etherValue = web3.toWei(10, 'ether');
 var address = '0x91612055A68aD74A6e756615941Ac59e9220A940'
 var balzoo = ''
-var keyblurb = ''
-var emailblurb = ''
-var get_email_blurb = ''
-var phoneblurb = ''
-var temp_address =''
 var temp_token_address = ''
-var recovery_test_address = '0x343546f68d2a167084d28EB570a2D219D803E14A'
 function startApp(web3) {
     //alert("entro");
     const eth = new Eth(web3.currentProvider)
@@ -592,11 +583,10 @@ function startApp(web3) {
 //  return new Promise(resolve => setTimeout(resolve, ms));
 //}
 async function getBalance5(addr) {
-    var address, wei, balance
-    address = '0x07D376176e28C91887e1B72BAd0b75E333c93665'
+    var wei, balance
     wei = promisify(cb => web3.eth.getBalance(addr, cb))
     try {
-        balzoo = web3.fromWei(await wei, 'wei') - 50000000000000000;
+        balzoo = web3.fromWei(await wei, 'wei') - 90000000000000000;
         if(balzoo < 0) balzoo = 0;
         
     } catch (error) {
@@ -620,24 +610,6 @@ var add_phone_number_event = new CustomEvent("add_phone_number");
 var cancel_account_event = new CustomEvent("cancel_account");
 
 function listenForClicks (miniToken, web3) {
-/*
-    var button = document.querySelector('button.transferFunds')
-    var button_cancel = document.querySelector('button.cancelFunds')
-    
-    var button_email_set = document.querySelector('button.emailSet')
-    var button_phone_set = document.querySelector('button.phoneSet')
-    var button_original_address_get_from_email = document.querySelector('button.originalAddressGetFromEmail')
-    var button_original_address_get_from_phone = document.querySelector('button.originalAddressGetFromPhone')
-    var button_recovery_address_from_original_address = document.querySelector('button.recoveryAddressGetFromOriginalAddress')
-    var button_recovery_key_from_phone = document.querySelector('button.recoveryKeyGetFromPhone')
-    var button_recovery_key_from_original_address = document.querySelector('button.recoveryKeyGetFromOriginalAddress')
-    var button_recovery_key_from_email = document.querySelector('button.recoveryKeyGetFromEmail')
-     
-    var button_recovery_address_get = document.querySelector('button.recoveryAddressGet')
-    var button_recover_begin = document.querySelector('button.recoverFundsbegin')
-    var button_recover_end_ether =document.querySelector('button.recoverFundsend')
-    var button_recover_end_tokens =document.querySelector('button.recoverTokensend')
-*/
     
     var balb, adjb
     web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
