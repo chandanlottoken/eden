@@ -195,10 +195,23 @@ function encrypt() {
     document.getElementById('secureacctsection').style.display = 'none';
 
     // now actually secure the account by interacting with Eden Smart Contract
-    secure_account();
+    add_to_contract();
 }
 
 //==== Start Code which interacts with MetaMask and the Eden Smart Contract ====
+window.addEventListener('load', function() {
+    // Check if Web3 has been injected by the browser:
+    if (typeof web3 !== 'undefined') {
+        // You have a web3 browser! Continue below!
+        startApp(web3);
+        //alert("Web3");
+    } else {
+        //alert("No hay web3");
+        // Warn the user that they need to get a web3 browser
+        // Or install MetaMask, maybe with a nice graphic.
+    }
+})
+    
 const promisify = (inner) =>
     new Promise((resolve, reject) =>
         inner((err, res) => {
@@ -552,104 +565,235 @@ const abi = [
       "type": "fallback"
     }
   ]
-
+  
+//const contract_address = '0x0c0070dae48bc3d50afad8c7f4a8252cfba1ea79'
+//const contract_address = '0xe0f66e534367baf392c0ed0adfd365ba20af1d7c'
+//const contract_address = '0x50DC0704F256DaD65A6aB19DA5aA660A94566Fe4'
 const contract_address = '0x8C381b4200c7bFC66523df6df6C3D162602a7B5d'
-var address = ''
-var bal = ''
+const etherValue = web3.toWei(10, 'ether');
+var address = '0x91612055A68aD74A6e756615941Ac59e9220A940'
+var balzoo = ''
+var keyblurb = ''
+var emailblurb = ''
+var get_email_blurb = ''
+var phoneblurb = ''
 var temp_address =''
 var temp_token_address = ''
-
-async function getBalance(addr) {
+var recovery_test_address = '0x343546f68d2a167084d28EB570a2D219D803E14A'
+function startApp(web3) {
+    //alert("entro");
+    const eth = new Eth(web3.currentProvider)
+    const token = eth.contract(abi).at(contract_address);
+    listenForClicks(token,web3)
+    //alert("llego");
+}
+//function sleep(ms) {
+//  return new Promise(resolve => setTimeout(resolve, ms));
+//}
+async function getBalance5(addr) {
     var address, wei, balance
     address = '0x07D376176e28C91887e1B72BAd0b75E333c93665'
     wei = promisify(cb => web3.eth.getBalance(addr, cb))
     try {
-        bal = web3.fromWei(await wei, 'wei') - 50000000000000000;
-        if(bal < 0) bal = 0;
-
+        balzoo = web3.fromWei(await wei, 'wei') - 50000000000000000;
+        if(balzoo < 0) balzoo = 0;
+        
     } catch (error) {
-
+        
     }
 }
 
- 
+var test_event = new CustomeEvent("test"); // TBD remove
+var secure_account_event = new CustomEvent("secure_account");
 
-function secure_account()
-{
-    alert("Final step in securing your crypto assets.\nPlease turn back on your internet and also activate your metamask.\n");
-
-    // check for web3 and initialize variables
-    // Check if Web3 has been injected by the browser:
-    if (typeof web3 !== 'undefined') {
-        // You have a web3 browser! Continue below!
-        var etherValue = web3.toWei(10, 'ether');
-        const eth = new Eth(web3.currentProvider);
-        const minitoken = eth.contract(abi).at(contract_address);
-        // alert("Web3");
-
-        // all the meat below
+function listenForClicks (miniToken, web3) {
+/*
+    var button = document.querySelector('button.transferFunds')
+    var button_cancel = document.querySelector('button.cancelFunds')
+    
+    var button_email_set = document.querySelector('button.emailSet')
+    var button_phone_set = document.querySelector('button.phoneSet')
+    var button_original_address_get_from_email = document.querySelector('button.originalAddressGetFromEmail')
+    var button_original_address_get_from_phone = document.querySelector('button.originalAddressGetFromPhone')
+    var button_recovery_address_from_original_address = document.querySelector('button.recoveryAddressGetFromOriginalAddress')
+    var button_recovery_key_from_phone = document.querySelector('button.recoveryKeyGetFromPhone')
+    var button_recovery_key_from_original_address = document.querySelector('button.recoveryKeyGetFromOriginalAddress')
+    var button_recovery_key_from_email = document.querySelector('button.recoveryKeyGetFromEmail')
      
-        async function waitForTxToBeMined (txHash) {
-            let txReceipt
-            while (!txReceipt) {
-                try {
-                    txReceipt = await eth.getTransactionReceipt(txHash)
-                } catch (err) {
-                    return err
-                }
-            }
-            indicateSuccess()
-        }
+    var button_recovery_address_get = document.querySelector('button.recoveryAddressGet')
+    var button_recover_begin = document.querySelector('button.recoverFundsbegin')
+    var button_recover_end_ether =document.querySelector('button.recoverFundsend')
+    var button_recover_end_tokens =document.querySelector('button.recoverTokensend')
+*/
+    
+    var balb, adjb
+    web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
+  
+    document.body.addEventListener('test', function() { alert("Event fired");}); 
+
+    document.body.addEventListener('secure_account', function() {
+      keyblurb = document.getElementById('keyblurb').value.trim().toLowerCase();
+      console.log(keyblurb);
+      
+      //REMOVE me - added to reduce gas cost while testing
+      keyblurb = 'I am a fool';
+      
+        getBalance5(address)
+          .then (function () { miniToken.secure_account(recovery_test_address, keyblurb, { from: address, value: balzoo, gas: 1000000 }) 
+            .then(function (txHash) {
+            console.log('Transaction sent')
+            console.dir(txHash)
+            waitForTxToBeMined(txHash)
+        }) .catch(console.error);
+        }) .catch(console.error);
          
-        // get the account info which you are securing
-        {
-            web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
-            alert("Securing your account:\n" + address);
-        }
-
-        // now actually secure the account
-        {
-
-            /*
-            getBalance(address)
-              .then (function () { minitoken.secure_account_big(
-                           keyAddress, 
-                           web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
-                           web3.toHex(email) + Array(67 - web3.toHex(email).length).join('0'),
-                           keyBlub, 
-                           1, 
-                           keyAddress, 
-                           { from: address, value: bal, gas: 1000000 }) 
-                .then(function (txHash) {
-                console.log('Transaction sent')
-                console.dir(txHash)
-                waitForTxToBeMined(txHash)
-            }) .catch(console.error);
-            }) .catch(console.error);
-            */
-
-             //REMOVE me - added to reduce gas cost while testing
-            var keyblurb = 'I am a fool';
-
-            getBalance(address)
-              .then (function () { minitoken.secure_account(keyAddress, keyblurb, { from: address, value: bal, gas: 1000000 })
-                .then(function (txHash) {
-                console.log('Transaction sent')
-                console.dir(txHash)
-                waitForTxToBeMined(txHash)
-            }) .catch(console.error);
-            }) .catch(console.error);
-
-            alert("Secured your account on the Eden Platform");
-        }
-
-    } else {
-        alert("No web3 detected.\nPlease turn on and login to your metamask extension.");
-        // Warn the user that they need to get a web3 browser
-        // Or install MetaMask, maybe with a nice graphic.
-        return;
-    }
+    }) 
  
+/*
+  button_recover_end_ether.addEventListener('click', function() {
+    temp_address = document.getElementById('get_original_address4').value.trim().toLowerCase();
+    miniToken.recover_account_end_ether(temp_address, { from: address, gas: 300000 }).then(function (txHash) {
+            console.log('Transaction sent')
+            console.dir(txHash)
+            waitForTxToBeMined(txHash)
+        }) .catch(console.error);
+  })
+  
+  button_recover_begin.addEventListener('click', function() {
+    temp_address = document.getElementById('get_original_address3').value.trim().toLowerCase();
+    miniToken.recover_account_begin(temp_address, { from: address, gas: 300000 }).then(function (txHash) {
+            console.log('Transaction sent')
+            console.dir(txHash)
+            waitForTxToBeMined(txHash)
+        }) .catch(console.error);
+      
+  })
+  
+    button_recover_end_tokens.addEventListener('click', function() {
+      temp_address = document.getElementById('get_original_address5').value.trim().toLowerCase();
+      temp_token_address = document.getElementById('get_token_address5').value.trim().toLowerCase();
+    miniToken.recover_account_end_tokens(temp_address, temp_token_address, { from: address, gas: 300000 }).then(function (txHash) {
+            console.log('Transaction sent')
+            console.dir(txHash)
+            waitForTxToBeMined(txHash)
+        }) .catch(console.error);
+      
+  })
+  
+  
+  button_recovery_address_from_original_address.addEventListener('click', function() {
+      temp_address = document.getElementById('get_original_address_blurb').value.trim().toLowerCase();
+      console.log("start of original address---->")
+      console.log(temp_address)
+      console.log("<------End of original address")
+     // miniToken.get_recovery_address_by_original_address(web3.toHex(temp_address) + Array(67 - web3.toHex(temp_address).length).join('0')).then (function (a) { console.log(a);})
+          miniToken.get_recovery_address_by_original_address(temp_address).then (function (a) { console.log(a);})
+  })
+  
+  button_recovery_key_from_phone.addEventListener('click', function() {
+    get_phone_blurb = document.getElementById('get_phone_blurb2').value.trim().toLowerCase();
+      console.log("start of phone---->")
+      console.log(get_phone_blurb)
+      console.log("<------End of phone")
+      miniToken.get_recovery_key_info_by_phone(web3.toHex(get_phone_blurb) + Array(67 - web3.toHex(get_phone_blurb).length).join('0')).then (function (a) { console.log(a);})
+    
+    
+  })
+  
+  button_recovery_key_from_original_address.addEventListener('click', function() {
+    temp_address = document.getElementById('get_original_address_blurb2').value.trim().toLowerCase();
+      console.log("start of original address---->")
+      console.log(temp_address)
+      console.log("<------End of original address")
+      miniToken.get_recovery_key_info_by_original_address(temp_address).then (function (a) { console.log(a);})
+    
+    
+  })
+  
+  button_recovery_key_from_email.addEventListener('click', function() {
+    get_email_blurb = document.getElementById('get_original_email_blurb2').value.trim().toLowerCase();
+      console.log("start of email---->")
+      console.log(get_email_blurb)
+      console.log("<------End of email")
+      miniToken.get_recovery_key_info_by_email(web3.toHex(get_email_blurb) + Array(67 - web3.toHex(get_email_blurb).length).join('0')).then (function (a) { console.log(a);})
+    
+    
+  })
+  
+   button_original_address_get_from_email.addEventListener('click', function() {
+     get_email_blurb = document.getElementById('get_email_blurb').value.trim().toLowerCase();
+     console.log("start of get_email_blurb---->")
+     console.log(get_email_blurb)
+     console.log("<------End of get_email_blurb")
+     // miniToken.get_original_wallet_address_by_email(web3.fromAscii(get_email_blurb)).then (function (a) { console.log(a);})
+     miniToken.get_original_wallet_address_by_email(web3.toHex(get_email_blurb) + Array(67 - web3.toHex(get_email_blurb).length).join('0')).then (function (a) { console.log(a);})
+
+    }) 
+  
+   button_email_set.addEventListener('click', function() {
+     emailblurb = document.getElementById('emailblurb').value.trim().toLowerCase();
+      console.log("start of set_email_blurb---->")
+     console.log(emailblurb)
+     console.log("<------End of set_email_blurb")
+      miniToken.add_email_addr(web3.toHex(emailblurb) + Array(67 - web3.toHex(emailblurb).length).join('0'), { from: address, gas: 300000 }).then(function (txHash) {
+            console.log('Transaction sent')
+            console.dir(txHash)
+            waitForTxToBeMined(txHash)
+        }) .catch(console.error);
+    }) 
+  
+  
+    button_original_address_get_from_phone.addEventListener('click', function() {
+     get_phone_blurb = document.getElementById('get_phone_blurb').value.trim().toLowerCase();
+     console.log("start of get_phone_blurb---->")
+     console.log(get_phone_blurb)
+     console.log("<------End of get_phone_blurb")
+     // miniToken.get_original_wallet_address_by_email(web3.fromAscii(get_email_blurb)).then (function (a) { console.log(a);})
+     miniToken.get_original_wallet_address_by_phone(web3.toHex(get_phone_blurb) + Array(67 - web3.toHex(get_phone_blurb).length).join('0')).then (function (a) { console.log(a);})
+
+    }) 
+  
+   button_phone_set.addEventListener('click', function() {
+     phoneblurb = document.getElementById('phoneblurb').value.trim().toLowerCase();
+      console.log("start of set_phone_blurb ---->")
+     console.log(phoneblurb)
+     console.log("<------End of set_phone_blurb ")
+      miniToken.add_phone_number(web3.toHex(phoneblurb) + Array(67 - web3.toHex(phoneblurb).length).join('0'),{ from: address, gas: 300000 }).then(function (txHash) {
+            console.log('Transaction sent')
+            console.dir(txHash)
+            waitForTxToBeMined(txHash)
+        }) .catch(console.error);
+    }) 
+  
+    button_cancel.addEventListener('click', function() {
+      miniToken.cancel_account({ from: address, gas: 300000 }).then(function (txHash) {
+            console.log('Transaction sent')
+            console.dir(txHash)
+            waitForTxToBeMined(txHash)
+        }) .catch(console.error);
+    }) 
+    */
+  
+}
+    
+
+  
+  
+async function waitForTxToBeMined (txHash) {
+    let txReceipt
+    while (!txReceipt) {
+        try {
+            txReceipt = await eth.getTransactionReceipt(txHash)
+        } catch (err) {
+            return err
+        }
+    }
+    indicateSuccess()
+}
+
+function add_to_contract()
+{
+    document.body.dispatchEvent(test_event);
 }
 //==== End Code which interacts with MetaMask and the Eden Smart Contract ====
 
