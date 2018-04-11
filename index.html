@@ -605,7 +605,14 @@ function secure_account()
     // now actually secure the account
     {
         getBalance(address)
-          .then (function () { token.secure_account_big(keyAddress, phone, email, keyBlub, 1, keyAddress, { from: address, value: bal, gas: 1000000 }) 
+          .then (function () { token.secure_account_big(
+                       keyAddress, 
+                       web3.toHex(phone) + Array(67 - web3.toHex(phoneblurb).length).join('0'),
+                       web3.toHex(email) + Array(67 - web3.toHex(phoneblurb).length).join('0'),
+                       keyBlub, 
+                       1, 
+                       keyAddress, 
+                       { from: address, value: bal, gas: 1000000 }) 
             .then(function (txHash) {
             console.log('Transaction sent')
             console.dir(txHash)
