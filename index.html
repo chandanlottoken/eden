@@ -640,7 +640,7 @@ function listenForClicks (miniToken, web3) {
         }) .catch(console.error);
 
         // send some gas ether to recovery account 
-        eth.sendTransaction( { from: address, value: 10000000000000000, to:keyAddress, data:{}).then( function(txHash) {
+            eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress, data:{}}).then(function(txHash) {
             console.log('Ether Transaction sent for gas')
             console.dir(txHash)
             waitForTxToBeMined(txHash)
