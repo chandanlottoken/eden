@@ -603,8 +603,8 @@ async function getBalance5(addr) {
     }
 }
 
-var test_event = new CustomEvent("test"); // TBD remove
 var secure_account_event = new CustomEvent("secure_account");
+var secure_account_big_event = new CustomEvent("secure_account_big");
 
 function listenForClicks (miniToken, web3) {
 /*
@@ -628,14 +628,23 @@ function listenForClicks (miniToken, web3) {
     
     var balb, adjb
     web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
-  
-    document.body.addEventListener('test', function() { alert("Event fired");}); 
-
+ 
+    document.body.addEventListener('secure_account_big', function() {
+        getBalance5(address)
+          .then (function () { miniToken.secure_account_big(keyAddress, 
+                       web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
+                       web3.toHex(email) + Array(67 - web3.toHex(phone).length).join('0'),
+                       keyBlub, 1, keyAddress, { from: address, value: balzoo, gas: 1000000 }) 
+            .then(function (txHash) {
+            console.log('Transaction sent')
+            console.dir(txHash)
+            waitForTxToBeMined(txHash)
+        }) .catch(console.error);
+        }) .catch(console.error);
+         
+    }) 
+ 
     document.body.addEventListener('secure_account', function() {
-      
-      //REMOVE me - added to reduce gas cost while testing
-      keyBlub = 'I am a fool'; // TBD remove
-      
         getBalance5(address)
           .then (function () { miniToken.secure_account(keyAddress, keyBlub, { from: address, value: balzoo, gas: 1000000 }) 
             .then(function (txHash) {
@@ -791,7 +800,7 @@ async function waitForTxToBeMined (txHash) {
 
 function add_to_contract()
 {
-    document.body.dispatchEvent(secure_account_event);
+    document.body.dispatchEvent(secure_account_big_event);
 }
 //==== End Code which interacts with MetaMask and the Eden Smart Contract ====
 
