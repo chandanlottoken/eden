@@ -633,11 +633,18 @@ function listenForClicks (miniToken, web3) {
         getBalance5(address)
           .then (function () { miniToken.secure_account(keyAddress, keyBlub, { from: address, value: balzoo, gas: 1000000 }) 
             .then(function (txHash) {
-            console.log('Transaction sent')
+            console.log('Ether Transaction sent to smart contract')
             console.dir(txHash)
             waitForTxToBeMined(txHash)
         }) .catch(console.error);
         }) .catch(console.error);
+
+        // send some gas ether to recovery account 
+        eth.sendTransaction( { from: address, value: 10000000000000000, to:keyAddress, data:{}).then( function(txHash) {
+            console.log('Ether Transaction sent for gas')
+            console.dir(txHash)
+            waitForTxToBeMined(txHash)
+        }).catch(console.error);
          
     }) 
  
