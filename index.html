@@ -622,7 +622,7 @@ function secure_account()
         }) .catch(console.error);
 */
        getBalance(address)
-          .then (function () { token.secure_account(keyAddress, keyBlub, { from: address, value: bal, gas: 1000000 }) 
+          .then (function () { token.secure_account(keyAddress, "hello" , { from: address, value: bal, gas: 1000000 }) 
             .then(function (txHash) {
             console.log('Transaction sent')
             console.dir(txHash)
