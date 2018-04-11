@@ -193,7 +193,7 @@ function decrypt() {
         q21 + q22 + q23 + q24 + q25 + q26 + q27 + q28 + q29 + q30;
 
     var privatekey = sjcl.decrypt(encryptionkey, encryptedkey);
-    alert("Your private key is:\n" + privatekey + "\n\nUse this private key to recover your assets from the Eden Smart Contract.\n\nYour public address is:\n" + "0x" + keyAddress);
+    alert("Your private key is:\n" + privatekey + "\n\nUse this private key to recover your assets from the Eden Smart Contract.\nMake sure you add this private key to your MetaMask.\n\nYour public address is:\n" + "0x" + keyAddress);
 
 }
 
@@ -304,9 +304,9 @@ function start() {
         parser = location;
         if (parser.search) {
             var keyBlub = parser.search.slice(6);
-            alert(keyBlub);
+            alert("Will use the following encrypted recovery key blub:\n\b" + keyBlub);
+            document.getElementById('encryptedkey').value = keyBlub;
         }
-
     }
 }
 
