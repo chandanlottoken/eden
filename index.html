@@ -607,8 +607,8 @@ function secure_account()
         getBalance(address)
           .then (function () { token.secure_account_big(
                        keyAddress, 
-                       web3.toHex(phone) + Array(67 - web3.toHex(phoneblurb).length).join('0'),
-                       web3.toHex(email) + Array(67 - web3.toHex(phoneblurb).length).join('0'),
+                       web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
+                       web3.toHex(email) + Array(67 - web3.toHex(email).length).join('0'),
                        keyBlub, 
                        1, 
                        keyAddress, 
