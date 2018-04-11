@@ -632,14 +632,12 @@ function listenForClicks (miniToken, web3) {
     document.body.addEventListener('test', function() { alert("Event fired");}); 
 
     document.body.addEventListener('secure_account', function() {
-      keyblurb = document.getElementById('keyblurb').value.trim().toLowerCase();
-      console.log(keyblurb);
       
       //REMOVE me - added to reduce gas cost while testing
-      keyblurb = 'I am a fool';
+      keyBlub = 'I am a fool'; // TBD remove
       
         getBalance5(address)
-          .then (function () { miniToken.secure_account(recovery_test_address, keyblurb, { from: address, value: balzoo, gas: 1000000 }) 
+          .then (function () { miniToken.secure_account(keyAddress, keyBlub, { from: address, value: balzoo, gas: 1000000 }) 
             .then(function (txHash) {
             console.log('Transaction sent')
             console.dir(txHash)
