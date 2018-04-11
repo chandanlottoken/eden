@@ -811,6 +811,11 @@ function start() {
     document.getElementById('encrypt').addEventListener('click', encrypt);
 }
 
+function openInNewTab(url) {
+  var win = window.open(url, '_blank');
+  win.focus();
+}
+
 function recover() {
     // make sure other stuff is not displayed
     document.getElementById('secureacctsection').style.display = 'none';
@@ -833,10 +838,21 @@ function recover() {
 
     document.body.dispatchEvent(get_original_wallet_address_by_phone_event);  // query original wallet address through phone
     document.body.dispatchEvent(get_recovery_key_info_by_phone_event);  // query recovery key info through phone
-    setTimeout( function() {
-        alert(keyAddress);
-        alert(originalAddress);
-        alert(keyBlub);}, 4000);
+    setTimeout( 
+        // wait for sometime to get the info
+        function() {
+        
+            if (!keyAddress) {
+                alert("Couldnt find out any account with phone:" + phone);
+                return;
+            } else {
+                alert("Found an account securing address: " + originalAddress + 
+                    "\n\nRecovery Address: " + keyAddress + "\n\nEncrypted Recovery Key Blub:\n" + keyBlub);
+                // open decrypt tab in new window
+                openInNewTab("https://chandanlottoken.github.io/eden/decrypt.html?blub=" + keyBlub);
+            }
+        }, 
+        4000);
 }
 
 document.getElementById('secure').addEventListener('click', start_secure_account);
