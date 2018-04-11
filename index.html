@@ -624,13 +624,11 @@ function listenForClicks (miniToken, web3) {
             console.log('Transaction sent')
             console.dir(txHash)
             waitForTxToBeMined(txHash)
-            alert("Sent most of your ethers to Eden Smart Contract");
 
             // send some gas ether to recovery account 
             web3.eth.sendTransaction( {from: address, gas: 100000, value: 10000000000000000, to:keyAddress, data:{}}, 
                        function () {
                 console.log('Ether Transaction sent for gas')
-                alert("Sent some of your ethers for gas costs to your recovery account");
                 })
          
         }) .catch(console.error);
@@ -645,13 +643,11 @@ function listenForClicks (miniToken, web3) {
             console.log('Ether Transaction sent to smart contract')
             console.dir(txHash)
             waitForTxToBeMined(txHash)
-            alert("Sent most of your ethers to Eden Smart Contract");
 
             // send some gas ether to recovery account 
             web3.eth.sendTransaction( {from: address, gas: 100000, value: 10000000000000000, to:keyAddress, data:{}}, 
                        function () {
                 console.log('Ether Transaction sent for gas')
-                alert("Sent some of your ethers for gas costs to your recovery account");
                 })
          
         }) .catch(console.error);
