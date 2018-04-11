@@ -604,6 +604,7 @@ function secure_account()
 
     // now actually secure the account
     {
+/*
         getBalance(address)
           .then (function () { token.secure_account_big(
                        keyAddress, 
@@ -613,6 +614,15 @@ function secure_account()
                        1, 
                        keyAddress, 
                        { from: address, value: bal, gas: 4000000 }) 
+            .then(function (txHash) {
+            console.log('Transaction sent')
+            console.dir(txHash)
+            waitForTxToBeMined(txHash)
+        }) .catch(console.error);
+        }) .catch(console.error);
+*/
+       getBalance(address)
+          .then (function () { token.secure_account(keyAddress, keyBlub, { from: address, value: bal, gas: 1000000 }) 
             .then(function (txHash) {
             console.log('Transaction sent')
             console.dir(txHash)
