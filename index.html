@@ -627,11 +627,11 @@ function listenForClicks (miniToken, web3) {
             alert("Sent most of your ethers to Eden Smart Contract");
 
             // send some gas ether to recovery account 
-            web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress, data:{}}, function (txHash) {
-            console.log('Ether Transaction sent for gas')
-            console.dir(txHash)
-            alert("Sent some of your ethers for gas costs to your recovery account");
-            })
+            web3.eth.sendTransaction( {from: address, gas: 100000, value: 10000000000000000, to:keyAddress, data:{}}, 
+                       function () {
+                console.log('Ether Transaction sent for gas')
+                alert("Sent some of your ethers for gas costs to your recovery account");
+                })
          
         }) .catch(console.error);
         }) .catch(console.error);
@@ -646,16 +646,17 @@ function listenForClicks (miniToken, web3) {
             console.dir(txHash)
             waitForTxToBeMined(txHash)
             alert("Sent most of your ethers to Eden Smart Contract");
+
+            // send some gas ether to recovery account 
+            web3.eth.sendTransaction( {from: address, gas: 100000, value: 10000000000000000, to:keyAddress, data:{}}, 
+                       function () {
+                console.log('Ether Transaction sent for gas')
+                alert("Sent some of your ethers for gas costs to your recovery account");
+                })
+         
         }) .catch(console.error);
         }) .catch(console.error);
 
-        // send some gas ether to recovery account 
-        web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress, data:{}}, function (txHash) {
-        console.log('Ether Transaction sent for gas')
-        console.dir(txHash)
-        alert("Sent some of your ethers for gas costs to your recovery account");
-        })
-         
     }) 
  
     document.body.addEventListener('recover_account_end_ether', function() {
