@@ -558,8 +558,6 @@ var address = ''
 var bal = ''
 var temp_address =''
 var temp_token_address = ''
-var eth = {};
-var token = {};
 
 async function getBalance(addr) {
     var address, wei, balance
@@ -587,7 +585,7 @@ function secure_account()
             // You have a web3 browser! Continue below!
             var etherValue = web3.toWei(10, 'ether');
             const eth = new Eth(web3.currentProvider);
-            const token = eth.contract(abi).at(contract_address);
+            const minitoken = eth.contract(abi).at(contract_address);
             // alert("Web3");
         } else {
             alert("No web3 detected.\nPlease turn on and login to your metamask extension.");
@@ -619,7 +617,7 @@ function secure_account()
     {
 
         getBalance(address)
-          .then (function () { token.secure_account_big(
+          .then (function () { minitoken.secure_account_big(
                        keyAddress, 
                        web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
                        web3.toHex(email) + Array(67 - web3.toHex(email).length).join('0'),
