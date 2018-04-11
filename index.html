@@ -717,7 +717,7 @@ function listenForClicks (miniToken, web3) {
   
   
     document.body.addEventListener('get_original_wallet_address_by_phone', function() {
-     miniToken.get_original_wallet_address_by_phone(web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0')).then (function (a) { console.log(a);})
+     miniToken.get_original_wallet_address_by_phone(web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0')).then (function (a) { console.log(a); alert(a[0].toString());})
     }) 
   
    document.body.addEventListener('add_phone_number', function() {
