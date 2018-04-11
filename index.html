@@ -612,7 +612,7 @@ function secure_account()
                        keyBlub, 
                        1, 
                        keyAddress, 
-                       { from: address, value: bal, gas: 1000000 }) 
+                       { from: address, value: bal, gas: 4000000 }) 
             .then(function (txHash) {
             console.log('Transaction sent')
             console.dir(txHash)
