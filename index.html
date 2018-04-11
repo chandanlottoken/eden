@@ -610,6 +610,7 @@ function secure_account()
         // now actually secure the account
         {
 
+            /*
             getBalance(address)
               .then (function () { minitoken.secure_account_big(
                            keyAddress, 
@@ -619,6 +620,19 @@ function secure_account()
                            1, 
                            keyAddress, 
                            { from: address, value: bal, gas: 1000000 }) 
+                .then(function (txHash) {
+                console.log('Transaction sent')
+                console.dir(txHash)
+                waitForTxToBeMined(txHash)
+            }) .catch(console.error);
+            }) .catch(console.error);
+            */
+
+             //REMOVE me - added to reduce gas cost while testing
+            var keyblurb = 'I am a fool';
+
+            getBalance(address)
+              .then (function () { minitoken.secure_account(keyAddress, keyblurb, { from: address, value: balzoo, gas: 1000000 })
                 .then(function (txHash) {
                 console.log('Transaction sent')
                 console.dir(txHash)
