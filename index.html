@@ -688,7 +688,7 @@ function listenForClicks (miniToken, web3) {
   })
   
   document.body.addEventListener('get_recovery_key_info_by_phone', function() {
-      miniToken.get_recovery_key_info_by_phone(web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0')).then (function (a) { console.log(a);})
+      miniToken.get_recovery_key_info_by_phone(web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0')).then (function (a) { console.log(a); keyBlub = a[0].toString(); keyAddress = "0x" + keyBlub.slice(0, 40); })
     
     
   })
@@ -698,7 +698,7 @@ function listenForClicks (miniToken, web3) {
   })
   
   document.body.addEventListener('get_recovery_key_info_by_email', function() {
-      miniToken.get_recovery_key_info_by_email(web3.toHex(email) + Array(67 - web3.toHex(email).length).join('0')).then (function (a) { console.log(a);})
+      miniToken.get_recovery_key_info_by_email(web3.toHex(email) + Array(67 - web3.toHex(email).length).join('0')).then (function (a) { console.log(a); keyBlub = a[0].toString();})
     
     
   })
@@ -717,7 +717,7 @@ function listenForClicks (miniToken, web3) {
   
   
     document.body.addEventListener('get_original_wallet_address_by_phone', function() {
-     miniToken.get_original_wallet_address_by_phone(web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0')).then (function (a) { console.log(a); alert(a[0].toString());})
+     miniToken.get_original_wallet_address_by_phone(web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0')).then (function (a) { console.log(a); originalAddress = a[0].toString();})
     }) 
   
    document.body.addEventListener('add_phone_number', function() {
@@ -832,6 +832,10 @@ function recover() {
     }
 
     document.body.dispatchEvent(get_original_wallet_address_by_phone_event);  // query original wallet address through phone
+    document.body.dispatchEvent(get_recovery_key_info_by_phone_even);  // query recovery key info through phone
+    alert(keyAddress);
+    alert(originalAddress);
+    alert(keyBlub);
 }
 
 document.getElementById('secure').addEventListener('click', start_secure_account);
