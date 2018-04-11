@@ -560,7 +560,6 @@ var temp_address =''
 var temp_token_address = ''
 var eth = {};
 var token = {};
-var etherValue = 0;
 
 async function getBalance(addr) {
     var address, wei, balance
@@ -575,6 +574,7 @@ async function getBalance(addr) {
     }
 }
 
+ 
 
 function secure_account()
 {
@@ -585,17 +585,30 @@ function secure_account()
         // Check if Web3 has been injected by the browser:
         if (typeof web3 !== 'undefined') {
             // You have a web3 browser! Continue below!
-            etherValue = web3.toWei(10, 'ether');
-            eth = new Eth(web3.currentProvider);
-            token = eth.contract(abi).at(contract_address);
-            //alert("Web3");
+            var etherValue = web3.toWei(10, 'ether');
+            const eth = new Eth(web3.currentProvider);
+            const token = eth.contract(abi).at(contract_address);
+            alert("Web3");
         } else {
             alert("No web3 detected.\nPlease turn on and login to your metamask extension.");
             // Warn the user that they need to get a web3 browser
             // Or install MetaMask, maybe with a nice graphic.
+            return;
         }
     }
-
+      
+    async function waitForTxToBeMined (txHash) {
+        let txReceipt
+        while (!txReceipt) {
+            try {
+                txReceipt = await eth.getTransactionReceipt(txHash)
+            } catch (err) {
+                return err
+            }
+        }
+        indicateSuccess()
+    }
+     
     // get the account info which you are securing
     {
         web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
