@@ -626,7 +626,7 @@ function listenForClicks (miniToken, web3) {
             waitForTxToBeMined(txHash)
 
             // send some gas ether to recovery account 
-            web3.eth.sendTransaction( {from: address, gas: 100000, value: 10000000000000000, to:keyAddress, data:{}}, 
+            web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
                        function () {
                 console.log('Ether Transaction sent for gas')
                 })
@@ -645,7 +645,7 @@ function listenForClicks (miniToken, web3) {
             waitForTxToBeMined(txHash)
 
             // send some gas ether to recovery account 
-            web3.eth.sendTransaction( {from: address, gas: 100000, value: 10000000000000000, to:keyAddress, data:{}}, 
+            web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
                        function () {
                 console.log('Ether Transaction sent for gas')
                 })
