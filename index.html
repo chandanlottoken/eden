@@ -2,18 +2,25 @@
 <html>
 
 <head>
-  <title>Encrypt Your Backup Key for Eden Smart Contract</title>
+  <title>Eden Protection for your Crypto Assets</title>
 </head>
+<script src="https://rawgit.com/ethereum/web3.js/0.16.0/dist/web3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethjs@0.3.0/dist/ethjs.min.js"></script>
 <script src="keythereum.min.js" type="text/javascript"></script>
 <script src="sjcl.js"></script>
 <body>
+    <div>
     Phone Number <input id="phone"> 
+    <br>
     <br>
     Email Address<input id="email"> 
     <br>
-
     <button id="secure">Secure My Assets</button>
-    <button id="recoverygen">Generate Recovery Account</button>
+    <button id="recover">Recover My Assets</button>
+    </div>
+
+    <div id="secureacctsection" style="display:none">
+    <hr>
 
     <div id="keygen" style="display:none">
     <b>Generating your recovery keys......</b>
@@ -85,19 +92,20 @@
     30. What is your youngest child's nickname? <input id="q30">
     <br>
     <br>
-<button id="encrypt">Done Answering</button>
+    <button id="encrypt">Done Answering</button>
     </div>
-<button id="start" style="display:none">Internet Turned Off</button>
 
-<textarea id="blub" style="display:none">ha ha</textarea
- 
-<hr>
-<div id="result"></div>
+    <button id="start" style="display:none">Internet Turned Off (Generate My Recovery Keys)</button>
+
+    </div>  
  
 <script>
-// Global key variables 
+// Global key variables FOR RECOVERY ACCOUNT
 var privateKey = "";
 var keyAddress = "";
+var keyBlub = "";
+var email = "";
+var phone = "";
 
 function encrypt() {
     var q1 = document.getElementById('q1').value.trim().toLowerCase();
@@ -179,29 +187,470 @@ function encrypt() {
     data.encrypteddata = encrypteddata;
     var b64encrypteddata = keyAddress + window.btoa(JSON.stringify(data));
 
-    alert ("Press ok to copy following string in the clipboard and use it in the Eden Smart Contract:\n\n"+ b64encrypteddata);
+    alert ("FYI: Following recovery key string encrypted blub will be used in the Eden Smart Contract:\n\n"+ b64encrypteddata);
+    keyBlub = b64encrypteddata;
 
-    document.getElementById('blub').innerHTML = b64encrypteddata;
-    document.getElementById('blub').style.display = 'block';
-    // copy the encrypted blub to clipboard
-    document.getElementById('blub').select();
-    document.execCommand("Copy"); // copy to clipboard
-    document.getElementById('blub').style.display = 'none';
+    // make sure rest of q & a block is no longer displayed
+    document.getElementById('secureacctsection').style.display = 'none';
 
+    // now actually secure the account by interacting with Eden Smart Contract
+    secure_account();
 }
 
-var isChrome = !!window.chrome && !!window.chrome.webstore;
-if (!isChrome)
-{
-    alert('Only supported on google chrome.');
-    window.close();
-} else {
-// start google chrome code
+//==== Start Code which interacts with MetaMask and the Eden Smart Contract ====
+const promisify = (inner) =>
+    new Promise((resolve, reject) =>
+        inner((err, res) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(res);
+            }
+        })
+    );
+    
+const abi = [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "email",
+          "type": "bytes32"
+        }
+      ],
+      "name": "get_original_wallet_address_by_email",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "name": "spender",
+          "type": "address"
+        }
+      ],
+      "name": "remove_me_show_allowance",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "take",
+          "type": "uint256"
+        }
+      ],
+      "name": "remove_some_ether",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "account_address",
+          "type": "address"
+        }
+      ],
+      "name": "get_recovery_key_info_by_original_address",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "account_owner",
+          "type": "address"
+        }
+      ],
+      "name": "cancel_veto_for_account",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "account_address",
+          "type": "address"
+        }
+      ],
+      "name": "recover_account_begin",
+      "outputs": [
+        {
+          "name": "key_info",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "input_recovery_account",
+          "type": "address"
+        },
+        {
+          "name": "input_phone_number_of_account_owner",
+          "type": "bytes32"
+        },
+        {
+          "name": "input_email_id_of_account_owner",
+          "type": "bytes32"
+        },
+        {
+          "name": "input_key_info",
+          "type": "string"
+        },
+        {
+          "name": "input_timeout",
+          "type": "uint256"
+        },
+        {
+          "name": "input_veto_address",
+          "type": "address"
+        }
+      ],
+      "name": "secure_account_big",
+      "outputs": [],
+      "payable": true,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "email",
+          "type": "bytes32"
+        }
+      ],
+      "name": "get_recovery_key_info_by_email",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "account_address",
+          "type": "address"
+        }
+      ],
+      "name": "get_recovery_address_by_original_address",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "input_recovery_account",
+          "type": "address"
+        },
+        {
+          "name": "input_key_info",
+          "type": "string"
+        }
+      ],
+      "name": "secure_account",
+      "outputs": [],
+      "payable": true,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "phone",
+          "type": "bytes32"
+        }
+      ],
+      "name": "get_original_wallet_address_by_phone",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "set_veto_for_account",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "account_address",
+          "type": "address"
+        }
+      ],
+      "name": "recover_account_end_ether",
+      "outputs": [
+        {
+          "name": "key_info",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "account_address",
+          "type": "address"
+        }
+      ],
+      "name": "cancel_account_call_after_recover",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "cancel_account",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "account_address",
+          "type": "address"
+        },
+        {
+          "name": "token",
+          "type": "address"
+        }
+      ],
+      "name": "recover_account_end_tokens",
+      "outputs": [
+        {
+          "name": "key_info",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "input_phone_number_of_account_owner",
+          "type": "bytes32"
+        }
+      ],
+      "name": "add_phone_number",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "phone",
+          "type": "bytes32"
+        }
+      ],
+      "name": "get_recovery_key_info_by_phone",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "input_veto_address",
+          "type": "address"
+        }
+      ],
+      "name": "add_veto_addr",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "input_email_id_of_account_owner",
+          "type": "bytes32"
+        }
+      ],
+      "name": "add_email_addr",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "payable": true,
+      "type": "fallback"
+    }
+  ]
 
-if(navigator.onLine){
-    alert('TURN OFF YOUR INTERNET CONNECTION (turn off wifi or disconnect LAN).');
-} 
-document.getElementById('start').style.display = 'block';
+const contract_address = '0x8C381b4200c7bFC66523df6df6C3D162602a7B5d'
+var address = ''
+var bal = ''
+var temp_address =''
+var temp_token_address = ''
+var eth = {};
+var token = {};
+var etherValue = 0;
+
+async function getBalance(addr) {
+    var address, wei, balance
+    address = '0x07D376176e28C91887e1B72BAd0b75E333c93665'
+    wei = promisify(cb => web3.eth.getBalance(addr, cb))
+    try {
+        bal = web3.fromWei(await wei, 'wei') - 50000000000000000;
+        if(bal < 0) bal = 0;
+
+    } catch (error) {
+
+    }
+}
+
+
+function secure_account()
+{
+    alert("Final step in securing your crypto assets.\nPlease turn back on your internet and also activate your metamask.\n");
+
+    // check for web3 and initialize variables
+    {
+        // Check if Web3 has been injected by the browser:
+        if (typeof web3 !== 'undefined') {
+            // You have a web3 browser! Continue below!
+            etherValue = web3.toWei(10, 'ether');
+            eth = new Eth(web3.currentProvider);
+            token = eth.contract(abi).at(contract_address);
+            //alert("Web3");
+        } else {
+            alert("No web3 detected.\nPlease turn on and login to your metamask extension.");
+            // Warn the user that they need to get a web3 browser
+            // Or install MetaMask, maybe with a nice graphic.
+        }
+    }
+
+    // get the account info which you are securing
+    {
+        web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
+        alert("Securing your account:\n" + address);
+    }
+
+    // now actually secure the account
+    {
+        getBalance(address)
+          .then (function () { token.secure_account_big(keyAddress, phone, email, keyblub, 1, keyAddress, { from: address, value: balzoo, gas: 1000000 }) 
+            .then(function (txHash) {
+            console.log('Transaction sent')
+            console.dir(txHash)
+            waitForTxToBeMined(txHash)
+        }) .catch(console.error);
+        }) .catch(console.error);
+
+        alert("Secured your account on the Eden Platform");
+    }
+
+}
+//==== End Code which interacts with MetaMask and the Eden Smart Contract ====
+
+
+function start_secure_account() {
+    var isChrome = !!window.chrome && !!window.chrome.webstore;
+    if (!isChrome)
+    {
+        alert('Only supported on google chrome.');
+        window.close();
+        return;
+    } 
+   
+    email = document.getElementById('email').value.trim().toLowerCase();
+    phone = document.getElementById('phone').value.trim().toLowerCase();
+    if (!email)
+    {
+        alert("Please enter email.");
+        return;
+    }
+    if (!phone)
+    {
+        alert("Please enter phone.");
+        return;
+    }
+
+    // make secure account stuff is displayed now 
+    document.getElementById('secureacctsection').style.display = 'block';
+
+    // start google chrome code
+    if(navigator.onLine){
+        alert('We need to generate your recovery keys.\n\nTURN OFF YOUR INTERNET CONNECTION (turn off wifi or disconnect LAN).');
+    } 
+    document.getElementById('start').style.display = 'block';
+    document.getElementById('start').addEventListener('click', start);
+}
 
 function start() {
     document.getElementById('start').style.display = 'none';
@@ -221,12 +670,19 @@ function start() {
     document.getElementById('keygen').style.display = 'none';
     document.getElementById('questionblock').style.display = 'block';
     });
+    document.getElementById('encrypt').addEventListener('click', encrypt);
 }
 
-document.getElementById('encrypt').addEventListener('click', encrypt);
-document.getElementById('start').addEventListener('click', start);
+function recover() {
+    // make sure other stuff is not displayed
+    document.getElementById('secureacctsection').style.display = 'none';
 
-} // end google chrome code
+    alert("Recover functionality not implemented yet");
+}
+
+document.getElementById('secure').addEventListener('click', start_secure_account);
+document.getElementById('recover').addEventListener('click', recover);
+
 
 </script>
 </body>
