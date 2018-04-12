@@ -725,6 +725,7 @@ async function listenForClicks (miniToken, web3) {
                 console.log("receipt");
                 console.log(receipt);
                 document.getElementById('sendingethertocontract').style.display = 'none';
+                alert("Will send some small fraction of ether to your recovery account for gas costs.");
                 // send some gas ether to recovery account 
                 web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
                            function () {
@@ -748,6 +749,7 @@ async function listenForClicks (miniToken, web3) {
                 console.log("receipt");
                 console.log(receipt);
                 document.getElementById('sendingethertocontract').style.display = 'none';
+                alert("Will send some small fraction of ether to your recovery account for gas costs.");
                 // send some gas ether to recovery account 
                 web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
                            function () {
