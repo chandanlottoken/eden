@@ -720,6 +720,7 @@ async function listenForClicks (miniToken, web3) {
             console.log('Transaction sent')
             console.dir(txHash)
 
+            alert("Will send all yours ethers (barring some for gas costs) under protective custody of Eden Smart Contract.");
             document.getElementById('sendingethertocontract').style.display = 'block';
             return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
                 console.log("receipt");
@@ -743,7 +744,8 @@ async function listenForClicks (miniToken, web3) {
             .then(function (txHash) {
             console.log('Ether Transaction sent to smart contract')
             console.dir(txHash)
-
+            
+            alert("Will send all yours ethers (barring some for gas costs) under protective custody of Eden Smart Contract.");
             document.getElementById('sendingethertocontract').style.display = 'block';
             return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
                 console.log("receipt");
