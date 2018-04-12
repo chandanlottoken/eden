@@ -693,14 +693,15 @@ async function listenForClicks (miniToken, web3) {
             .then(function (txHash) {
             console.log('Transaction sent')
             console.dir(txHash)
-            web3.eth.getTransactionReceipt(txHash).then( function() {
-                
+            web3.eth.getTransactionReceipt(txHash, function(e, r) {
+                console.log(e);
+                console.log(r);
                 // send some gas ether to recovery account 
                 web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
                            function () {
                     console.log('Ether Transaction sent for gas')
                     })
-            }).catch(console.error);
+            })
          
         }) .catch(console.error);
         }) .catch(console.error);
