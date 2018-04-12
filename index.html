@@ -33,7 +33,7 @@
 
     <div id="secureacctsection" style="display:none">
     <hr>
-
+    <div id"sendingethertocontract" style="display:none"><b>Sending your ethereum in protective custody of Eden...<b></div>
     <div id="keygen" style="display:none">
     <b>Generating your recovery keys......</b>
     </div>
@@ -720,9 +720,11 @@ async function listenForClicks (miniToken, web3) {
             console.log('Transaction sent')
             console.dir(txHash)
 
+            document.getElementById('sendingethertocontract').style.display = 'block';
             return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
                 console.log("receipt");
                 console.log(receipt);
+                document.getElementById('sendingethertocontract').style.display = 'none';
                 // send some gas ether to recovery account 
                 web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
                            function () {
@@ -740,14 +742,18 @@ async function listenForClicks (miniToken, web3) {
             .then(function (txHash) {
             console.log('Ether Transaction sent to smart contract')
             console.dir(txHash)
-            waitForTxToBeMined(txHash)
 
-            // send some gas ether to recovery account 
-            web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
-                       function () {
-                console.log('Ether Transaction sent for gas')
-                })
-         
+            document.getElementById('sendingethertocontract').style.display = 'block';
+            return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
+                console.log("receipt");
+                console.log(receipt);
+                document.getElementById('sendingethertocontract').style.display = 'none';
+                // send some gas ether to recovery account 
+                web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
+                           function () {
+                    console.log('Ether Transaction sent for gas')
+                    })
+                });  
         }) .catch(console.error);
         }) .catch(console.error);
 
@@ -765,13 +771,14 @@ async function listenForClicks (miniToken, web3) {
             document.getElementById('assettransferstarted').style.display = 'block';
             document.getElementById('recoverydone').style.display = 'none';
             console.dir(txHash)
-            waitForTxToBeMined(txHash)
-            var receipt = web3.eth.getTransactionReceipt(txHash).then(console.log);
-            if (receipt != null) {
+
+            return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
+                console.log("receipt");
+                console.log(receipt);
                 document.getElementById('assettransferstarted').style.display = 'none';
                 document.getElementById('assettransferdone').style.display = 'block';
                 document.getElementById('transfereth').style.display = 'none';
-            }
+            });
         }) .catch(console.error);
   })
   
@@ -786,14 +793,15 @@ async function listenForClicks (miniToken, web3) {
             console.log('Transaction sent')
             document.getElementById('recoverystarted').style.display = 'block';
             console.dir(txHash)
-            waitForTxToBeMined(txHash)
-            var receipt = web3.eth.getTransactionReceipt(txHash).then(console.log);
-            if (receipt != null) {
+
+            return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
+                console.log("receipt");
+                console.log(receipt);
                 document.getElementById('recoverystarted').style.display = 'none';
                 document.getElementById('beginrecover').style.display = 'none';
                 document.getElementById('recoverydone').style.display = 'block';
                 document.getElementById('transfereth').style.display = 'block';
-            }
+            });
         }) .catch(console.error);
       
   })
