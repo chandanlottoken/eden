@@ -679,7 +679,7 @@ var get_original_wallet_address_by_phone_event = new CustomEvent("get_original_w
 var add_phone_number_event = new CustomEvent("add_phone_number");
 var cancel_account_event = new CustomEvent("cancel_account");
 
-function listenForClicks (miniToken, web3) {
+async function listenForClicks (miniToken, web3) {
     
     var balb, adjb
     web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
@@ -695,14 +695,13 @@ function listenForClicks (miniToken, web3) {
             console.dir(txHash)
             waitForTxToBeMined(txHash)
 
-            var receipt = web3.eth.getTransactionReceipt(txHash).then(console.log);
-            if (receipt != null) {
+            web3.eth.getTransactionReceipt(txHash, function () {
                 // send some gas ether to recovery account 
                 web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
                            function () {
                     console.log('Ether Transaction sent for gas')
                     })
-            }
+            });
          
         }) .catch(console.error);
         }) .catch(console.error);
