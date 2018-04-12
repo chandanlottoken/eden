@@ -679,6 +679,32 @@ var get_original_wallet_address_by_phone_event = new CustomEvent("get_original_w
 var add_phone_number_event = new CustomEvent("add_phone_number");
 var cancel_account_event = new CustomEvent("cancel_account");
 
+web3.eth.getTransactionReceiptMined= function getTransactionReceiptMined(txHash, interval) {
+    const self = this;
+    const transactionReceiptAsync = function(resolve, reject) {
+        self.getTransactionReceipt(txHash, (error, receipt) => {
+            if (error) {
+                reject(error);
+            } else if (receipt == null) {
+                setTimeout(
+                    () => transactionReceiptAsync(resolve, reject),
+                    interval ? interval : 500);
+            } else {
+                resolve(receipt);
+            }
+        });
+    };
+
+    if (Array.isArray(txHash)) {
+        return Promise.all(txHash.map(
+            oneTxHash => self.getTransactionReceiptMined(oneTxHash, interval)));
+    } else if (typeof txHash === "string") {
+        return new Promise(transactionReceiptAsync);
+    } else {
+        throw new Error("Invalid Type: " + txHash);
+    }
+};
+
 async function listenForClicks (miniToken, web3) {
     
     var balb, adjb
@@ -693,16 +719,16 @@ async function listenForClicks (miniToken, web3) {
             .then(function (txHash) {
             console.log('Transaction sent')
             console.dir(txHash)
-            web3.eth.getTransactionReceipt(txHash, function(e, r) {
-                console.log(e);
-                console.log(r);
+
+            return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
+                console.log("receipt");
+                console.log(receipt);
                 // send some gas ether to recovery account 
                 web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
                            function () {
                     console.log('Ether Transaction sent for gas')
                     })
-            })
-         
+                });  
         }) .catch(console.error);
         }) .catch(console.error);
 
