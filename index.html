@@ -16,8 +16,19 @@
     Email Address<input id="email"> 
     <br>
     <button id="secure">Secure My Assets</button>
-    <button id="recover">Recover My Assets</button>
+    <button id="recover">Locate My Recovery Account</button>
     </div>
+
+    <div id="recoveracctsection" style="display:none">
+    <button id="beginrecover" style="display:none">Begin Recovery Process</button>
+    <button id="transfereth" style="display:none">Transfer Assets</button>
+    <div id="recoverystarted" style="display:none"><b><br>Recovery process started...<br></b></div>
+    <div id="recoverydone" style="display:none"><b><br>Assets ready to be transferred to recovery account.<br></b></div>
+    <div id="assettransferstarted" style="display:none"><b><br>Assets transfer started...<br></b></div>
+    <div id="assettransferdone" style="display:none"><b><br>Assets transfer done and everything recovered.<br></b></div>
+    </div>
+
+
 
     <div id="secureacctsection" style="display:none">
     <hr>
@@ -656,23 +667,51 @@ function listenForClicks (miniToken, web3) {
     }) 
  
     document.body.addEventListener('recover_account_end_ether', function() {
+    // fetch the accounts from MetaMask again
+    web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
+    if (address != keyAddress) { 
+        alert("Please add the recovery account to MetaMask and make it the default account.");
+        return;
+    }
     miniToken.recover_account_end_ether(originalAddress, { from: address, gas: 300000 }).then(function (txHash) {
             console.log('Transaction sent')
+            document.getElementById('assettransferstarted').style.display = 'block';
+            document.getElementById('recoverydone').style.display = 'none';
             console.dir(txHash)
             waitForTxToBeMined(txHash)
+            document.getElementById('assettransferstarted').style.display = 'none';
+            document.getElementById('assettransferdone').style.display = 'block';
+            document.getElementById('transfereth').style.display = 'none';
         }) .catch(console.error);
   })
   
     document.body.addEventListener('recover_account_begin',  function() {
+    // fetch the accounts from MetaMask again
+    web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
+    if (address != keyAddress) { 
+        alert("Please add the recovery account to MetaMask and make it the default account.");
+        return;
+    }
     miniToken.recover_account_begin(originalAddress, { from: address, gas: 300000 }).then(function (txHash) {
             console.log('Transaction sent')
+            document.getElementById('recoverystarted').style.display = 'block';
             console.dir(txHash)
             waitForTxToBeMined(txHash)
+            document.getElementById('recoverystarted').style.display = 'none';
+            document.getElementById('beginrecover').style.display = 'none';
+            document.getElementById('recoverydone').style.display = 'block';
+            document.getElementById('transfereth').style.display = 'block';
         }) .catch(console.error);
       
   })
   
     document.body.addEventListener('recover_account_end_tokens', function() {
+    // fetch the accounts from MetaMask again
+    web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
+    if (address != keyAddress) { 
+        alert("Please add the recovery account to MetaMask and make it the default account.");
+        return;
+    }
       temp_token_address = document.getElementById('get_token_address5').value.trim().toLowerCase(); // TBD to be fixed
     miniToken.recover_account_end_tokens(originalAddress, temp_token_address, { from: address, gas: 300000 }).then(function (txHash) {
             console.log('Transaction sent')
@@ -758,6 +797,9 @@ function add_to_contract()
 
 
 function start_secure_account() {
+    // make sure other stuff is not displayed
+    document.getElementById('recoveracctsection').style.display = 'none';
+
     var isChrome = !!window.chrome && !!window.chrome.webstore;
     if (!isChrome)
     {
@@ -816,6 +858,16 @@ function openInNewTab(url) {
   win.focus();
 }
 
+function beginrecover()
+{
+    document.body.dispatchEvent(recover_account_begin_event); // start account recovery
+}
+
+function transfereth()
+{
+    document.body.dispatchEvent(recover_account_end_ether_event); // transfer ethereum
+}
+
 function recover() {
     // make sure other stuff is not displayed
     document.getElementById('secureacctsection').style.display = 'none';
@@ -850,9 +902,15 @@ function recover() {
                     "\n\nRecovery Address: " + keyAddress + "\n\nEncrypted Recovery Key Blub:\n" + keyBlub);
                 // open decrypt tab in new window
                 openInNewTab("https://chandanlottoken.github.io/eden/decrypt.html?blub=" + keyBlub);
+
+                // Make some buttons visible
+                document.getElementById('recoveracctsection').style.display = 'block';
+                document.getElementById('beginrecover').style.display = 'block';
+                document.getElementById('beginrecover').addEventListener('click', beginrecover);
+                document.getElementById('transfereth').addEventListener('click', transfereth);
             }
         }, 
-        4000);
+        2000);
 }
 
 document.getElementById('secure').addEventListener('click', start_secure_account);
