@@ -695,11 +695,14 @@ function listenForClicks (miniToken, web3) {
             console.dir(txHash)
             waitForTxToBeMined(txHash)
 
-            // send some gas ether to recovery account 
-            web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
-                       function () {
-                console.log('Ether Transaction sent for gas')
-                })
+            var receipt = web3.eth.getTransactionReceipt(txHash).then(console.log);
+            if (receipt != null) {
+                // send some gas ether to recovery account 
+                web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
+                           function () {
+                    console.log('Ether Transaction sent for gas')
+                    })
+            }
          
         }) .catch(console.error);
         }) .catch(console.error);
@@ -738,9 +741,12 @@ function listenForClicks (miniToken, web3) {
             document.getElementById('recoverydone').style.display = 'none';
             console.dir(txHash)
             waitForTxToBeMined(txHash)
-            document.getElementById('assettransferstarted').style.display = 'none';
-            document.getElementById('assettransferdone').style.display = 'block';
-            document.getElementById('transfereth').style.display = 'none';
+            var receipt = web3.eth.getTransactionReceipt(txHash).then(console.log);
+            if (receipt != null) {
+                document.getElementById('assettransferstarted').style.display = 'none';
+                document.getElementById('assettransferdone').style.display = 'block';
+                document.getElementById('transfereth').style.display = 'none';
+            }
         }) .catch(console.error);
   })
   
@@ -756,10 +762,13 @@ function listenForClicks (miniToken, web3) {
             document.getElementById('recoverystarted').style.display = 'block';
             console.dir(txHash)
             waitForTxToBeMined(txHash)
-            document.getElementById('recoverystarted').style.display = 'none';
-            document.getElementById('beginrecover').style.display = 'none';
-            document.getElementById('recoverydone').style.display = 'block';
-            document.getElementById('transfereth').style.display = 'block';
+            var receipt = web3.eth.getTransactionReceipt(txHash).then(console.log);
+            if (receipt != null) {
+                document.getElementById('recoverystarted').style.display = 'none';
+                document.getElementById('beginrecover').style.display = 'none';
+                document.getElementById('recoverydone').style.display = 'block';
+                document.getElementById('transfereth').style.display = 'block';
+            }
         }) .catch(console.error);
       
   })
