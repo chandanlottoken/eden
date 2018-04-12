@@ -235,7 +235,7 @@ const promisify = (inner) =>
             }
         })
     );
-    
+
 const abi = [
     {
       "constant": true,
@@ -574,12 +574,70 @@ const abi = [
       "type": "function"
     },
     {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "all_accounts",
+      "outputs": [
+        {
+          "name": "account_owner",
+          "type": "address"
+        },
+        {
+          "name": "recovery_account",
+          "type": "address"
+        },
+        {
+          "name": "veto_address",
+          "type": "address"
+        },
+        {
+          "name": "phone_number_of_account_owner",
+          "type": "bytes32"
+        },
+        {
+          "name": "email_id_of_account_owner",
+          "type": "bytes32"
+        },
+        {
+          "name": "key_info",
+          "type": "string"
+        },
+        {
+          "name": "veto_flag",
+          "type": "bool"
+        },
+        {
+          "name": "account_exists",
+          "type": "bool"
+        },
+        {
+          "name": "recovery_timer_active",
+          "type": "bool"
+        },
+        {
+          "name": "timeout",
+          "type": "uint256"
+        },
+        {
+          "name": "ether_balance",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
       "payable": true,
       "type": "fallback"
     }
   ]
+const contract_address = '0x16449221E9c4a6834F559aC7d3c33C51a48700e6'
   
-const contract_address = '0x8C381b4200c7bFC66523df6df6C3D162602a7B5d'
 const etherValue = web3.toWei(10, 'ether');
 var address = '0x91612055A68aD74A6e756615941Ac59e9220A940'
 var balzoo = ''
