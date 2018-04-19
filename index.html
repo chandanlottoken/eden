@@ -734,7 +734,7 @@ web3.eth.getTransactionReceiptMined= function getTransactionReceiptMined(txHash,
             } else if (receipt == null) {
                 setTimeout(
                     () => transactionReceiptAsync(resolve, reject),
-                    interval ? interval : 500);
+                    interval ? interval : 2500);
             } else {
                 resolve(receipt);
             }
