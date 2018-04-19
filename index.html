@@ -23,10 +23,13 @@
 <script src="keythereum.min.js" type="text/javascript"></script>
 <script src="sjcl.js"></script>
 <body>
-    <div class="jumbotron">
-        <h1 class="display-5">Protect with Eden Platform</h1>
+    <div class="container">
+        <div class="jumbotron" style="background-image: url(https://blog.oup.com/wp-content/uploads/2015/12/Snow-field-1260px.jpg);">
+        <h1 class="display-5" align="center" >Protect with Eden Platform</h1>
+        </div>
     </div>
-    <div>
+
+    <div class="container" align="center">
     <div class="row">
     <div class="form-group col">
     <label for="phone" class="col-form-label col-form-label-lg">Phone Number</label>
@@ -38,32 +41,34 @@
     </div>
     </div>
     
-    <div>
+    <div class="container" align="center">
     <button class="btn btn-primary btn-lg" id="secure">Secure My Assets</button>
     <button class="btn btn-primary btn-lg" id="recover">Locate My Recovery Account</button>
     </div>
     </div>
 
-    <div id="recoveracctsection" style="display:none">
+    <div class="container" align="center" id="recoveracctsection" style="display:none">
+    <div class="container" align="center">
     <button class="btn btn-primary btn-lg" id="beginrecover" style="display:none">Begin Recovery Process</button>
     <button class="btn btn-primary btn-lg" id="transfereth" style="display:none">Transfer Assets</button>
+    </div>
+    <div class="container" align="center">
     <div id="recoverystarted" style="display:none"><b><br>Recovery process started...⌛<br></b></div>
     <div id="recoverydone" style="display:none"><b><br>Assets ready to be transferred to recovery account.<br></b></div>
     <div id="assettransferstarted" style="display:none"><b><br>Assets transfer started...⌛<br></b></div>
     <div id="assettransferdone" style="display:none"><b><br>Assets transfer done and everything recovered.<br></b></div>
     </div>
+    </div>
 
 
-
-    <div id="sendingethertocontract" style="display:none"><b>Sending your ethereum in protective custody of Eden...⌛</b></div>
-    <div id="secureacctsection" style="display:none">
+    
+    <div class="container" id="sendingethertocontract" style="display:none"><b>Sending your ethereum in protective custody of Eden...⌛</b></div>
+    <div class="container" id="secureacctsection" style="display:none">
     <hr>
-    <div id="keygen" style="display:none">
+    <div class="container" id="keygen" style="display:none">
     <b>Generating your recovery keys......</b>
     </div>
-    <div class="card">
-    <div class="card-body">
-    <div id="questionblock" style="display:none">
+    <div class="container pre-scrollable" id="questionblock" style="display:none">
     <b> Answer atleast 7 questions. </b>
     <br>
     If not relevant, leave answers to the following questions empty.
@@ -130,15 +135,17 @@
     30. What is your youngest child's nickname? <input id="q30">
     <br>
     <br>
+    </div>
+    <div class="container">
     <button class="btn btn-primary btn-lg" id="encrypt">Done Answering</button>
     </div>
-    </div>
-    </div>
-
+    
+    <div class="container">
     <button class="btn btn-primary btn-lg" id="start" style="display:none">Internet Turned Off (Generate My Recovery Keys)</button>
+    </div>
 
     </div>  
- 
+
 <script>
 // Global key variables FOR RECOVERY ACCOUNT
 var privateKey = "";

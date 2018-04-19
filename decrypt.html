@@ -18,14 +18,21 @@
 </head>
 <script src="sjcl.js"></script>
 <body>
-    <button class="btn btn-primary btn-lg" id="start" style="display:none">Internet Turned Off</button>
-    <div id="initial" style="display:none">
-    Encrypted Key Blub:<br><textarea id="encryptedkey" rows="8" cols="100"></textarea>
-    <br>
-    <button class="btn btn-primary btn-lg" id="answer">Answer security questions</button>
-    <br>
-    <br>
+    <div class="container">
+        <div class="jumbotron" style="background-image: url(https://blog.oup.com/wp-content/uploads/2015/12/Snow-field-1260px.jpg);">
+        <h1 class="display-5" align="center" >Protect with Eden Platform</h1>
+        </div>
     </div>
+
+    <div class="container" align="center">
+    <button class="btn btn-primary btn-lg" id="start" style="display:none">Internet Turned Off</button>
+    <div id="initial" align="center" style="display:none">
+        <div for="encryptedkey" class="control-label control-label-lg" align="center">Encrypted Key Blub</div>
+    <textarea id="encryptedkey" rows="8" cols="100"></textarea>
+    <button class="btn btn-primary btn-lg" align="center" id="answer">Answer security questions</button>
+    </div>
+
+    <div class="container pre-scrollable" align="center">
     <div id= "sec" style="display:none">
         <b>Do not leave answers to the following questions empty. They were answered while protecting your account. </b>
     <br>
@@ -151,12 +158,14 @@
         30. What is your youngest child's nickname? <input id="q30">
     <br>
     </div>
-    <br>
+    </div>
+
+    <div class="container" align="center">
     <br>
     <button class="btn btn-primary btn-lg" id="decrypt" style="display:none">Retrieve My Private Key</button>
- 
-<hr>
-<div id="result"></div>
+    </div>
+
+    </div>
  
 <script>
 function decrypt() {
@@ -221,6 +230,9 @@ function answer() {
         alert("This encrypted blub can not be handled. Please contact your service provider.");
         return;
     }
+    
+    // hide other stuff
+    document.getElementById('initial').style.display = 'none';
 
     // display relevant questions only
     document.getElementById('sec').style.display = 'block';
