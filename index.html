@@ -30,6 +30,7 @@
     </div>
 
     <div class="container" align="center">
+
     <div class="row">
     <div class="form-group col">
     <label for="phone" class="col-form-label col-form-label-lg">Phone Number</label>
@@ -39,33 +40,38 @@
     <label for="email" class="col-form-label col-form-label-lg">Email Address</label>
     <input type="email" class="form-control  form-control-lg" id="email" aria-describedby="emailHelp" placeholder="Enter email">
     </div>
-    </div>
+    </div> <!-- phone and email input block -->
     
     <div class="container" align="center">
     <button class="btn btn-primary btn-lg" id="secure">Secure My Crypto Assets</button>
     <button class="btn btn-primary btn-lg" id="recover">Locate My Recovery Account</button>
-    </div>
-    </div>
+    </div> <!-- main buttons block -->
+
+    </div>  <!-- main  block -->
 
     <div class="container" align="center" id="recoveracctsection" style="display:none">
     <div class="container" align="center">
     <button class="btn btn-primary btn-lg" id="beginrecover" style="display:none">Begin Recovery Process</button>
     <button class="btn btn-primary btn-lg" id="transfereth" style="display:none">Transfer Assets</button>
-    </div>
+    </div>  <!-- recovery buttons  -->
     <div class="container" align="center">
     <div id="recoverystarted" style="display:none"><b><br>Recovery process started...⌛<br></b></div>
     <div id="recoverydone" style="display:none"><b><br>Assets ready to be transferred to recovery account.<br></b></div>
     <div id="assettransferstarted" style="display:none"><b><br>Assets transfer started...⌛<br></b></div>
     <div id="assettransferdone" style="display:none"><b><br>Assets transfer done and everything recovered.<br></b></div>
-    </div>
-    </div>
+    </div>  <!-- strings for different steps block -->
+    </div>  <!-- recoveracctsection block -->
 
 
     
     <div class="container" id="secureacctsection" style="display:none">
+
     <div class="container" id="sendingethertocontract" style="display:none"><b>Sending your ethereum in protective custody of Eden...⌛</b></div>
+
     <div class="container" id="keygen" style="display:none">
+
     <b>Generating your recovery keys......</b>
+
     <div id="questionblock" style="display:none">
     <div class="container pre-scrollable">
     <b> Answer atleast 7 questions. </b>
@@ -134,18 +140,19 @@
     30. What is your youngest child's nickname? <input id="q30">
     <br>
     <br>
-    </div>
+    </div>   <!-- scrolling container -->
+
     <div class="container">
     <button class="btn btn-primary btn-lg" id="encrypt">Done Answering</button>
-    </div>
-    </div>
-    </div>
+    </div> <!-- encrypt button -->
+    </div> <!-- question block -->
+    </div> <!-- keygen block  -->
     
     <div class="container">
     <button class="btn btn-primary btn-lg" id="start" align="center" style="display:none">Internet Turned Off (Generate My Recovery Keys)</button>
-    </div>
+    </div> <!-- internet off container  -->
 
-    </div>  
+    </div>  <!-- secureacctsection block -->
 
 <script>
 // Global key variables FOR RECOVERY ACCOUNT
