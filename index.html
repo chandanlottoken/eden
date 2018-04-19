@@ -28,7 +28,9 @@
         <div class="jumbotron" style="background-image: url(https://blog.oup.com/wp-content/uploads/2015/12/Snow-field-1260px.jpg);">
         <h1 class="display-5" align="center" >Protect with Eden Platform</h1>
         <h2 align="center" id="securingheader" style="display:none" >..Securing Now..</h2>
+        <h2 align="center" id="securedheader" style="display:none" >..All Secured..</h2>
         <h2 align="center" id="recoveringheader" style="display:none" >..Recovering Now..</h2>
+        <h2 align="center" id="recoveredheader" style="display:none" >..All Recovered..</h2>
         </div>
     </div>
 
@@ -777,6 +779,9 @@ async function listenForClicks (miniToken, web3) {
                 web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
                            function () {
                     console.log('Ether Transaction sent for gas')
+                    document.getElementById('securingheader').style.display = 'none';
+                    document.getElementById('securedheader').style.display = 'block';
+                    document.getElementById('recoveringheader').style.display = 'none';
                     })
                 });  
         }) .catch(console.error);
@@ -802,6 +807,9 @@ async function listenForClicks (miniToken, web3) {
                 web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
                            function () {
                     console.log('Ether Transaction sent for gas')
+                    document.getElementById('securingheader').style.display = 'none';
+                    document.getElementById('securedheader').style.display = 'block';
+                    document.getElementById('recoveringheader').style.display = 'none';
                     })
                 });  
         }) .catch(console.error);
@@ -828,6 +836,9 @@ async function listenForClicks (miniToken, web3) {
                 document.getElementById('assettransferstarted').style.display = 'none';
                 document.getElementById('assettransferdone').style.display = 'block';
                 document.getElementById('transfereth').style.display = 'none';
+                document.getElementById('securingheader').style.display = 'none';
+                document.getElementById('recoveredheader').style.display = 'block';
+                document.getElementById('recoveringheader').style.display = 'none';
             });
         }) .catch(console.error);
   })
