@@ -214,9 +214,7 @@ function decrypt() {
         q21 + q22 + q23 + q24 + q25 + q26 + q27 + q28 + q29 + q30;
 
     var privatekey = sjcl.decrypt(encryptionkey, encryptedkey);
-    // bootbox.alert({ message: "Your private key is:\n" + privatekey + "\n\nUse this private key to recover your assets from the Eden Smart Contract.\nMake sure you add this private key to your MetaMask.\n\nYour public address is:\n" + "0x" + keyAddress, size:"large"});
-    bootbox.alert({ title: "Add this private key of your recovery account to your MetaMask", message: "Your private key is:\n" + privatekey + "\n\nYour public address is:\n" + "0x" + keyAddress, size:"large"});
-
+    bootbox.alert({ message: "Your private key is:<br><b>" + privatekey + "</b><br><br>Use this private key to recover your assets from the Eden Smart Contract.\nMake sure you add this private key to your MetaMask.<br><br>Your public address is:\n" + "0x" + keyAddress, size:"large"});
 }
 
 function answer() {
