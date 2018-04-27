@@ -327,7 +327,8 @@ function start() {
         parser = location;
         if (parser.search) {
             var keyBlub = parser.search.slice(6);
-            bootbox.alert({ message: "Will use the following encrypted recovery key blub:<br><br>" + keyBlub, size: "large"});
+            //bootbox.alert({ message: "Will use the following encrypted recovery key blub:<br><br>" + keyBlub, size: "large"});
+            alert("Will use the following encrypted recovery key blub:\n\n" + keyBlub);
             document.getElementById('encryptedkey').value = keyBlub;
         }
     }
