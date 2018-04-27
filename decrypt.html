@@ -5,18 +5,17 @@
 <!-- Required meta tags -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+<script src="sjcl.js"></script>
 
   <title>Retrieve Your Backup Key from Eden Smart Contract</title>
 </head>
-<script src="sjcl.js"></script>
 <body>
     <div class="container">
         <div class="jumbotron" style="background-image: url(https://blog.oup.com/wp-content/uploads/2015/12/Snow-field-1260px.jpg);">
@@ -215,7 +214,8 @@ function decrypt() {
         q21 + q22 + q23 + q24 + q25 + q26 + q27 + q28 + q29 + q30;
 
     var privatekey = sjcl.decrypt(encryptionkey, encryptedkey);
-    alert("Your private key is:\n" + privatekey + "\n\nUse this private key to recover your assets from the Eden Smart Contract.\nMake sure you add this private key to your MetaMask.\n\nYour public address is:\n" + "0x" + keyAddress);
+    // bootbox.alert({ message: "Your private key is:\n" + privatekey + "\n\nUse this private key to recover your assets from the Eden Smart Contract.\nMake sure you add this private key to your MetaMask.\n\nYour public address is:\n" + "0x" + keyAddress, size:"large"});
+    bootbox.alert({ title: "Add this private key of your recovery account to your MetaMask", message: "Your private key is:\n" + privatekey + "\n\nYour public address is:\n" + "0x" + keyAddress, size:"large"});
 
 }
 
@@ -228,7 +228,7 @@ function answer() {
 
     // Make sure we can handle the security questions
     if (data.qsource !=  "QmNY5oxKAzZwf6UswT1h3WWwWqMw58S2Qtdbjz2QVPmqEY") {
-        alert("This encrypted blub can not be handled. Please contact your service provider.");
+        bootbox.alert("This encrypted blub can not be handled. Please contact your service provider.");
         return;
     }
     
@@ -304,13 +304,13 @@ function answer() {
 var isChrome = !!window.chrome && !!window.chrome.webstore;
 if (!isChrome)
 {
-    alert('Only supported on google chrome.');
+    bootbox.alert('Only supported on google chrome.');
     window.close();
 } else {
 // start google chrome code
 
 if(navigator.onLine){
-    alert('TURN OFF YOUR INTERNET CONNECTION (turn off wifi or disconnect LAN).');
+    bootbox.alert('TURN OFF YOUR INTERNET CONNECTION (turn off wifi or disconnect LAN).');
 } 
 document.getElementById('start').style.display = 'block';
 
@@ -318,7 +318,7 @@ function start() {
     document.getElementById('start').style.display = 'none';
 
     if(navigator.onLine){
-        alert('Internet is still on. You will be at risk.');
+        bootbox.alert('Internet is still on. You will be at risk.');
     }
 
     document.getElementById('initial').style.display = 'block';
@@ -329,7 +329,7 @@ function start() {
         parser = location;
         if (parser.search) {
             var keyBlub = parser.search.slice(6);
-            alert("Will use the following encrypted recovery key blub:\n\b" + keyBlub);
+            bootbox.alert("Will use the following encrypted recovery key blub:\n\b" + keyBlub);
             document.getElementById('encryptedkey').value = keyBlub;
         }
     }
