@@ -257,7 +257,7 @@ function encrypt() {
     document.getElementById('secureacctsection').style.display = 'none';
 
     // now actually secure the account by interacting with Eden Smart Contract
-    add_to_contract();
+    bootbox.alert("Turn on the internet now.", function() { console.log("calling add_to_contract"); add_to_contract();});
 }
 
 //==== Start Code which interacts with MetaMask and the Eden Smart Contract ====
