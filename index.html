@@ -822,7 +822,7 @@ async function listenForClicks (miniToken, web3) {
     // fetch the accounts from MetaMask again
     web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
     if (address != keyAddress) { 
-        alert("Please add the recovery account to MetaMask and make it the default account.");
+        alert("Please add the recovery account to MetaMask and make it the default account.\nYour recovery account address is "+ address);
         return;
     }
     miniToken.recover_account_end_ether(originalAddress, { from: address, gas: 300000 }).then(function (txHash) {
