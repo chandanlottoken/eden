@@ -769,13 +769,13 @@ async function listenForClicks (miniToken, web3) {
 				web3.toHex(email) + Array(67 - web3.toHex(phone).length).join('0'),
 				keyBlub, 1, keyAddress )
 
-			var estimate 
 			web3.eth.estimateGas({
 				to: "0xc4abd0339eb8d57087278718986382264244252f", 
 				data: secure_account_big_data
 				}, function(e,r){ 
 
-					estimate = r ; console.log(r) 
+					var estimate = r 
+					console.log("Esimate gas price for txn = " + estimate) 
 
 					miniToken.secure_account_big(keyAddress, 
 						web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
