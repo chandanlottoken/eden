@@ -783,7 +783,7 @@ async function listenForClicks (miniToken, web3) {
 
 						var estimate = gas_amount * gasprice
 						console.log("Esimate gas price for txn = " + estimate) 
-						var send_val = balzoo - 3*estimate
+						var send_val = balzoo - 4*estimate
 						console.log("Sending remaining balance = " + send_val) 
 
 						miniToken.secure_account_big(keyAddress, 
