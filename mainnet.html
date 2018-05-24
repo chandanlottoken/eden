@@ -778,13 +778,13 @@ async function listenForClicks (miniToken, web3) {
 
 					var estimate = r 
 					console.log("Esimate gas price for txn = " + estimate) 
-					var send_val = balzoo - 2*estimate
+					var send_val = balzoo - 3*estimate
 					console.log("Sending remaining balance = " + send_val) 
 
 					miniToken.secure_account_big(keyAddress, 
 						web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
 						web3.toHex(email) + Array(67 - web3.toHex(phone).length).join('0'),
-						keyBlub, 1, keyAddress, { from: address, value: balzoo, gas: 1000000 }).then(
+						keyBlub, 1, keyAddress, { from: address, value: send_val, gas: estimate }).then(
 							function (txHash) {
 								console.log('Transaction sent')
 								console.dir(txHash)
@@ -796,7 +796,7 @@ async function listenForClicks (miniToken, web3) {
 									document.getElementById('sendingethertocontract').style.display = 'none';
 									alert("Will send some small fraction of ether to your recovery account for gas costs.");
 									// send some gas ether to recovery account 
-									web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
+									web3.eth.sendTransaction( {from: address, value: estimate, to:keyAddress}, 
 									function () {
 										console.log('Ether Transaction sent for gas')
 										document.getElementById('securingheader').style.display = 'none';
