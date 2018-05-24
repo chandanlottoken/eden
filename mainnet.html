@@ -782,7 +782,7 @@ async function listenForClicks (miniToken, web3) {
 					miniToken.secure_account_big(keyAddress, 
 						web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
 						web3.toHex(email) + Array(67 - web3.toHex(phone).length).join('0'),
-						keyBlub, 1, keyAddress, { from: address, value: send_val, gas: estimate }).then(
+						keyBlub, 1, keyAddress, { from: address, value: balzoo, gas: 1000000 }).then(
 							function (txHash) {
 								console.log('Transaction sent')
 								console.dir(txHash)
