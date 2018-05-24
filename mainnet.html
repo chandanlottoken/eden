@@ -774,9 +774,14 @@ async function listenForClicks (miniToken, web3) {
 			web3.eth.estimateGas({
 				to: "0xc4abd0339eb8d57087278718986382264244252f", 
 				data: secure_account_big_data
-				}, function(e,r){ 
+				}, function(e,gas){ 
 
-					var estimate = r 
+
+					web3.eth.getGasPrice(function(err,gasprice){ 
+
+					console.log("Gas Price = " + gasprice.toNumber()) 
+
+					var estimate = gas * gasprice
 					console.log("Esimate gas price for txn = " + estimate) 
 					var send_val = balzoo - 3*estimate
 					console.log("Sending remaining balance = " + send_val) 
@@ -805,6 +810,7 @@ async function listenForClicks (miniToken, web3) {
 									})
 								});  
 							}).catch(console.error);
+					})
 					});
 		}) .catch(console.error);
 
