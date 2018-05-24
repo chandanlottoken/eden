@@ -774,43 +774,43 @@ async function listenForClicks (miniToken, web3) {
 			web3.eth.estimateGas({
 				to: "0xc4abd0339eb8d57087278718986382264244252f", 
 				data: secure_account_big_data
-				}, function(e,gas){ 
+				}, function(e,gas_amount){ 
 
 
 					web3.eth.getGasPrice(function(err,gasprice){ 
 
-					console.log("Gas Price = " + gasprice.toNumber()) 
+						console.log("Gas Price = " + gasprice.toNumber()) 
 
-					var estimate = gas * gasprice
-					console.log("Esimate gas price for txn = " + estimate) 
-					var send_val = balzoo - 3*estimate
-					console.log("Sending remaining balance = " + send_val) 
+						var estimate = gas_amount * gasprice
+						console.log("Esimate gas price for txn = " + estimate) 
+						var send_val = balzoo - 3*estimate
+						console.log("Sending remaining balance = " + send_val) 
 
-					miniToken.secure_account_big(keyAddress, 
-						web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
-						web3.toHex(email) + Array(67 - web3.toHex(phone).length).join('0'),
-						keyBlub, 1, keyAddress, { from: address, value: send_val, gas: estimate }).then(
-							function (txHash) {
-								console.log('Transaction sent')
-								console.dir(txHash)
-								alert("Will send all yours ethers (barring some for gas costs) under protective custody of Numisafe Smart Contract.");
-								document.getElementById('sendingethertocontract').style.display = 'block';
-								return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
-									console.log("receipt");
-									console.log(receipt);
-									document.getElementById('sendingethertocontract').style.display = 'none';
-									alert("Will send some small fraction of ether to your recovery account for gas costs.");
-									// send some gas ether to recovery account 
-									web3.eth.sendTransaction( {from: address, value: estimate, to:keyAddress}, 
-									function () {
-										console.log('Ether Transaction sent for gas')
-										document.getElementById('securingheader').style.display = 'none';
-										document.getElementById('securedheader').style.display = 'block';
-										document.getElementById('recoveringheader').style.display = 'none';
-									})
-								});  
-							}).catch(console.error);
-					})
+						miniToken.secure_account_big(keyAddress, 
+							web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
+							web3.toHex(email) + Array(67 - web3.toHex(phone).length).join('0'),
+							keyBlub, 1, keyAddress, { from: address, value: send_val, gas: gas_amount }).then(
+								function (txHash) {
+									console.log('Transaction sent')
+									console.dir(txHash)
+									alert("Will send all yours ethers (barring some for gas costs) under protective custody of Numisafe Smart Contract.");
+									document.getElementById('sendingethertocontract').style.display = 'block';
+									return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
+										console.log("receipt");
+										console.log(receipt);
+										document.getElementById('sendingethertocontract').style.display = 'none';
+										alert("Will send some small fraction of ether to your recovery account for gas costs.");
+										// send some gas ether to recovery account 
+										web3.eth.sendTransaction( {from: address, value: estimate, to:keyAddress}, 
+										function () {
+											console.log('Ether Transaction sent for gas')
+											document.getElementById('securingheader').style.display = 'none';
+											document.getElementById('securedheader').style.display = 'block';
+											document.getElementById('recoveringheader').style.display = 'none';
+										})
+									});  
+								}).catch(console.error);
+						})
 					});
 		}) .catch(console.error);
 
