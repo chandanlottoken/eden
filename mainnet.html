@@ -694,7 +694,7 @@ var temp_token_address = ''
 function startApp(web3) {
     //alert("entro");
     const eth = new Eth(web3.currentProvider)
-    const token = eth.contract(abi).at(contract_address);
+    const token = web3.eth.contract(abi).at(contract_address);
     listenForClicks(token,web3)
     //alert("llego");
 }
