@@ -694,7 +694,7 @@ var temp_token_address = ''
 function startApp(web3) {
     //alert("entro");
     const eth = new Eth(web3.currentProvider)
-    const token = web3.eth.contract(abi).at(contract_address);
+    const token = eth.contract(abi).at(contract_address);
     listenForClicks(token,web3)
     //alert("llego");
 }
@@ -705,7 +705,7 @@ async function getBalance5(addr) {
     var wei, balance
     wei = promisify(cb => web3.eth.getBalance(addr, cb))
     try {
-        balzoo = web3.fromWei(await wei, 'wei') - 90000000000000000;
+        balzoo = web3.fromWei(await wei, 'wei');
         if(balzoo < 0) balzoo = 0;
         
     } catch (error) {
@@ -760,33 +760,53 @@ async function listenForClicks (miniToken, web3) {
     web3.eth.getAccounts(function(err, accounts) { console.log(accounts); address = accounts.toString(); })
  
     document.body.addEventListener('secure_account_big', function() {
-        getBalance5(address)
-          .then (function () { miniToken.secure_account_big(keyAddress, 
-                       web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
-                       web3.toHex(email) + Array(67 - web3.toHex(phone).length).join('0'),
-                       keyBlub, 1, keyAddress, { from: address, value: balzoo, gas: 1000000 }) 
-            .then(function (txHash) {
-            console.log('Transaction sent')
-            console.dir(txHash)
 
-            alert("Will send all yours ethers (barring some for gas costs) under protective custody of Numisafe Smart Contract.");
-            document.getElementById('sendingethertocontract').style.display = 'block';
-            return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
-                console.log("receipt");
-                console.log(receipt);
-                document.getElementById('sendingethertocontract').style.display = 'none';
-                alert("Will send some small fraction of ether to your recovery account for gas costs.");
-                // send some gas ether to recovery account 
-                web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
-                           function () {
-                    console.log('Ether Transaction sent for gas')
-                    document.getElementById('securingheader').style.display = 'none';
-                    document.getElementById('securedheader').style.display = 'block';
-                    document.getElementById('recoveringheader').style.display = 'none';
-                    })
-                });  
-        }) .catch(console.error);
-        }) .catch(console.error);
+        getBalance5(address)
+          .then (function () { 
+
+			const secure_account_big_instance = web3.eth.contract(abi).at(contract_address);
+
+			var  secure_account_big_data = secure_account_big_instance.secure_account_big.getData(keyAddress, 
+				web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
+				web3.toHex(email) + Array(67 - web3.toHex(phone).length).join('0'),
+				keyBlub, 1, keyAddress )
+
+			web3.eth.estimateGas({
+				to: "0xc4abd0339eb8d57087278718986382264244252f", 
+				data: secure_account_big_data
+				}, function(e,r){ 
+
+					var estimate = r 
+					console.log("Esimate gas price for txn = " + estimate) 
+					var send_val = balzoo - 2*estimate
+					console.log("Sending remaining balance = " + send_val) 
+
+					miniToken.secure_account_big(keyAddress, 
+						web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
+						web3.toHex(email) + Array(67 - web3.toHex(phone).length).join('0'),
+						keyBlub, 1, keyAddress, { from: address, value: balzoo, gas: 1000000 }).then(
+							function (txHash) {
+								console.log('Transaction sent')
+								console.dir(txHash)
+								alert("Will send all yours ethers (barring some for gas costs) under protective custody of Numisafe Smart Contract.");
+								document.getElementById('sendingethertocontract').style.display = 'block';
+								return web3.eth.getTransactionReceiptMined(txHash).then(function (receipt) {
+									console.log("receipt");
+									console.log(receipt);
+									document.getElementById('sendingethertocontract').style.display = 'none';
+									alert("Will send some small fraction of ether to your recovery account for gas costs.");
+									// send some gas ether to recovery account 
+									web3.eth.sendTransaction( {from: address, value: 10000000000000000, to:keyAddress}, 
+									function () {
+										console.log('Ether Transaction sent for gas')
+										document.getElementById('securingheader').style.display = 'none';
+										document.getElementById('securedheader').style.display = 'block';
+										document.getElementById('recoveringheader').style.display = 'none';
+									})
+								});  
+							}).catch(console.error);
+					});
+		}) .catch(console.error);
 
     }) 
  
