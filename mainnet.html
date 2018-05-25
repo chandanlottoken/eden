@@ -727,6 +727,8 @@ var add_email_addr_event = new CustomEvent("add_email_addr");
 var get_original_wallet_address_by_phone_event = new CustomEvent("get_original_wallet_address_by_phone");
 var add_phone_number_event = new CustomEvent("add_phone_number");
 var cancel_account_event = new CustomEvent("cancel_account");
+var gas_account_rounded_up = 0 
+var estimate = 0 
 
 web3.eth.getTransactionReceiptMined= function getTransactionReceiptMined(txHash, interval) {
     const self = this;
@@ -782,8 +784,8 @@ async function listenForClicks (miniToken, web3) {
 						console.log("Gas Price = " + gasprice.toNumber()) 
 						
 						var buffer = 5000
-						var gas_amount_rounded_up = gas_amount + buffer
-						var estimate = gas_amount_rounded_up * gasprice
+						gas_amount_rounded_up = gas_amount + buffer
+						estimate = gas_amount_rounded_up * gasprice
 						console.log("Esimate gas price for txn = " + estimate) 
 						var send_val = balzoo - 4*estimate
 						console.log("Sending remaining balance = " + send_val) 
@@ -853,7 +855,7 @@ async function listenForClicks (miniToken, web3) {
         alert("Please add the recovery account to MetaMask and make it the default account.");
         return;
     }
-    miniToken.recover_account_end_ether(originalAddress, { from: address, gas: 300000 }).then(function (txHash) {
+    miniToken.recover_account_end_ether(originalAddress, { from: address, gas: gas_amount_rounded_up }).then(function (txHash) {
             console.log('Transaction sent')
             document.getElementById('assettransferstarted').style.display = 'block';
             document.getElementById('recoverydone').style.display = 'none';
@@ -879,7 +881,7 @@ async function listenForClicks (miniToken, web3) {
         alert("Please add the recovery account to MetaMask and make it the default account.");
         return;
     }
-    miniToken.recover_account_begin(originalAddress, { from: address, gas: 300000 }).then(function (txHash) {
+    miniToken.recover_account_begin(originalAddress, { from: address, gas: gas_amount_rounded_up }).then(function (txHash) {
             console.log('Transaction sent')
             document.getElementById('recoverystarted').style.display = 'block';
             console.dir(txHash)
