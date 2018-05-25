@@ -773,14 +773,11 @@ async function listenForClicks (miniToken, web3) {
                                 web3.toHex(email) + Array(67 - web3.toHex(phone).length).join('0'),
                                 keyBlub, 1, keyAddress, function(e,gas_amount) { 
 
-					console.log("Gas estimate = "+gas_amount)
-
-					web3.eth.getGasPrice(function(err,gasprice){ 
-
+						console.log("Gas estimate = "+gas_amount)
+						web3.eth.getGasPrice(function(err,gasprice){ 
 						console.log("Gas Price = " + gasprice.toNumber()) 
-						
-						var buffer = 5000
-						gas_amount_rounded_up = gas_amount + buffer
+						var buffer = 0.2
+						gas_amount_rounded_up = Math.round(gas_amount*(1+buffer))
 						estimate = gas_amount_rounded_up * gasprice
 						console.log("Esimate gas price for txn = " + estimate) 
 						var send_val = balzoo - 4*estimate
