@@ -780,8 +780,10 @@ async function listenForClicks (miniToken, web3) {
 					web3.eth.getGasPrice(function(err,gasprice){ 
 
 						console.log("Gas Price = " + gasprice.toNumber()) 
+						
+						var buffer = 5000
 
-						var estimate = gas_amount * gasprice
+						var estimate = (gas_amount + buffer) * gasprice
 						console.log("Esimate gas price for txn = " + estimate) 
 						var send_val = balzoo - 4*estimate
 						console.log("Sending remaining balance = " + send_val) 
