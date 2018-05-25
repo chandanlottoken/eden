@@ -848,7 +848,7 @@ async function listenForClicks (miniToken, web3) {
         alert("Please add the recovery account to MetaMask and make it the default account.");
         return;
     }
-    miniToken.recover_account_end_ether(originalAddress, { from: address, gas: gas_amount_rounded_up }).then(function (txHash) {
+    miniToken.recover_account_end_ether(originalAddress, {from: address}).then(function (txHash) {
             console.log('Transaction sent')
             document.getElementById('assettransferstarted').style.display = 'block';
             document.getElementById('recoverydone').style.display = 'none';
@@ -874,7 +874,7 @@ async function listenForClicks (miniToken, web3) {
         alert("Please add the recovery account to MetaMask and make it the default account.");
         return;
     }
-    miniToken.recover_account_begin(originalAddress, { from: address, gas: gas_amount_rounded_up }).then(function (txHash) {
+    miniToken.recover_account_begin(originalAddress, { from: address}).then(function (txHash) {
             console.log('Transaction sent')
             document.getElementById('recoverystarted').style.display = 'block';
             console.dir(txHash)
