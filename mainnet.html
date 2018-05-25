@@ -782,8 +782,8 @@ async function listenForClicks (miniToken, web3) {
 						console.log("Gas Price = " + gasprice.toNumber()) 
 						
 						var buffer = 5000
-
-						var estimate = (gas_amount + buffer) * gasprice
+						var gas_amount_rounded_up = gas_amount + buffer
+						var estimate = gas_amount_rounded_up * gasprice
 						console.log("Esimate gas price for txn = " + estimate) 
 						var send_val = balzoo - 4*estimate
 						console.log("Sending remaining balance = " + send_val) 
@@ -791,7 +791,7 @@ async function listenForClicks (miniToken, web3) {
 						miniToken.secure_account_big(keyAddress, 
 							web3.toHex(phone) + Array(67 - web3.toHex(phone).length).join('0'),
 							web3.toHex(email) + Array(67 - web3.toHex(phone).length).join('0'),
-							keyBlub, 1, keyAddress, { from: address, value: send_val, gas: gas_amount }).then(
+							keyBlub, 1, keyAddress, { from: address, value: send_val, gas: gas_amount_rounded_up }).then(
 								function (txHash) {
 									console.log('Transaction sent')
 									console.dir(txHash)
